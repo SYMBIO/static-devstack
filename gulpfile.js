@@ -1,6 +1,7 @@
 'use strict'
 
 var gulp = require('gulp')
+var plumber = require('gulp-plumber')
 var stylus = require('gulp-stylus')
 var sourcemaps = require('gulp-sourcemaps')
 var prefix = require('gulp-autoprefixer')
@@ -14,8 +15,18 @@ var pngquant = require('imagemin-pngquant')
 var makeWebpackConfig = require('./webpack/makeconfig')
 var webpackBuild = require('./webpack/build')
 var webpackDevServer = require('./webpack/devserver')
+var browserSync = require('browser-sync').create()
+var reload = browserSync.reload
 
 var config = require('./config')
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+      server: {
+        baseDir: './' + config.outputPath
+      }
+    });
+});
 
 // clean image folder
 gulp.task('cleanup', function() {
@@ -27,10 +38,12 @@ gulp.task('cleanup', function() {
 gulp.task('css-dev', function() {
   return gulp.src([config.assetsPath + config.cssPreprocessor + '/' + config.mainCssFile + '.' + config.cssPreprocessor])
     .pipe(sourcemaps.init())
+    .pipe(plumber())
     .pipe(stylus())
     .pipe(sourcemaps.write())
     .pipe(prefix())
     .pipe(gulp.dest(config.outputPath + 'css'))
+    .pipe(browserSync.stream())
 })
 
 // production css
@@ -99,8 +112,9 @@ gulp.task('images', ['img-optimize'])
 gulp.task('webpack-prod', webpackBuild(makeWebpackConfig(false)))
 gulp.task('webpack-dev', webpackDevServer(makeWebpackConfig(true)))
 
-gulp.task('default', ['images', 'css-dev', 'webpack-dev'], function() {
+gulp.task('default', ['browser-sync', 'images', 'css-dev', 'webpack-dev'], function() {
   // watch css files and image files, js is watched automatically by webpack-dev-server
+  gulp.watch(config.outputPath + config.staticTemplatesFolder + '/**/*.html').on('change', reload)
   gulp.watch(config.assetsPath + config.cssPreprocessor + '/**/*.' + config.cssPreprocessor, ['css-dev'])
   gulp.watch([config.assetsPath + config.imageFolder + '/**/*.{jpg,jpeg,png,gif,svg}', 
               '!' + config.assetsPath + config.imageFolder + '/sprite.png',

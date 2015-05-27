@@ -1,7 +1,2 @@
 node_modules
-*.styl
-static/img/*
-static/styl/*
-static/js/*
-static/*.html
 web
