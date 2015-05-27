@@ -3,6 +3,7 @@
 var NotifyPlugin = require('./notifyplugin');
 var path = require('path');
 var webpack = require('webpack');
+var gulpConfig = require('../config')
 
 module.exports = function(isDevelopment) {
 
@@ -16,9 +17,9 @@ module.exports = function(isDevelopment) {
         // Why only-dev-server instead of dev-server:
         // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
         'webpack/hot/only-dev-server',
-        './static/js/main.js'
+        './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
       ] : [
-        './static/js/main.js'
+        './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
       ],
     },
     module: {
@@ -32,11 +33,11 @@ module.exports = function(isDevelopment) {
     },
     output: isDevelopment ? {
       path: path.join(__dirname, '/js/'),
-      filename: 'main.js',
+      filename: gulpConfig.mainJsFile + '.js',
       publicPath: 'http://localhost:8888/js/'
     } : {
-      path: 'web/js/',
-      filename: 'main.js'
+      path: gulpConfig.outputPath + 'js/',
+      filename: gulpConfig.mainJsFile + '.js'
     },
     plugins: (function() {
       var plugins = [];

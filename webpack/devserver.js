@@ -3,6 +3,7 @@
 var gutil = require('gulp-util');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
+var config = require('../config')
 
 module.exports = function(webpackConfig) {
   return function(callback) {
@@ -28,7 +29,7 @@ module.exports = function(webpackConfig) {
       // Callback is called only once, can't be used to catch compilation errors.
       if (err)
         throw new gutil.PluginError('webpack-dev-server', err);
-      gutil.log('[webpack-dev-server]', 'localhost:8888/js/main.js');
+      gutil.log('[webpack-dev-server]', 'localhost:8888/js/' + config.mainJsFile + '.js');
       callback();
     });
   };
