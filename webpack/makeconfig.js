@@ -5,9 +5,9 @@ var path = require('path');
 var webpack = require('webpack');
 var gulpConfig = require('../config')
 
-var bowerDir = path.join(__dirname, "../bower_components")
+
 var bowerPlugins = {
-  svg4everybody: bowerDir + '/svg4everybody/svg4everybody.js'
+  svg4everybody: 'svg4everybody/svg4everybody.js'
 }
 // substitutions for dependencies in some bower plugins
 // var bowerSubstitutions = {
@@ -77,6 +77,7 @@ module.exports = function(isDevelopment) {
       return plugins;
     })(),
     resolve: {
+      modulesDirectories: ['node_modules', 'bower_components'],
       alias: bowerPlugins,
       extensions: ['', '.js', '.jsx', '.json']
     }
