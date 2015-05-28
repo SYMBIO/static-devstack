@@ -5,6 +5,18 @@ var path = require('path');
 var webpack = require('webpack');
 var gulpConfig = require('../config')
 
+var bowerDir = path.join(__dirname, "../bower_components")
+var bowerPlugins = {
+  svg4everybody: bowerDir + '/svg4everybody/svg4everybody.js'
+}
+// substitutions for dependencies in some bower plugins
+// var bowerSubstitutions = {
+//   $: "jquery",
+//   jQuery: "jquery",
+//   "window.jQuery": "jquery",
+//   "root.jQuery": "jquery"
+// }
+
 module.exports = function(isDevelopment) {
 
   var config = {
@@ -23,6 +35,7 @@ module.exports = function(isDevelopment) {
       ],
     },
     module: {
+      noParse: Object.keys(bowerPlugins).map(function(k){return bowerPlugins[k]}),
       loaders: [{
         exclude: /node_modules/,
         loaders: [
@@ -45,11 +58,13 @@ module.exports = function(isDevelopment) {
         plugins.push(
           NotifyPlugin,
           new webpack.HotModuleReplacementPlugin(),
+          // new webpack.ProvidePlugin(bowerSubstitutions),
           // Tell reloader to not reload if there is an error.
           new webpack.NoErrorsPlugin()
         );
       else
         plugins.push(
+          // new webpack.ProvidePlugin(bowerSubstitutions),
           new webpack.optimize.DedupePlugin(),
           new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.optimize.UglifyJsPlugin({
@@ -62,6 +77,7 @@ module.exports = function(isDevelopment) {
       return plugins;
     })(),
     resolve: {
+      alias: bowerPlugins,
       extensions: ['', '.js', '.jsx', '.json']
     }
   };
