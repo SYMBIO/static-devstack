@@ -6,8 +6,9 @@ var webpack = require('webpack');
 var gulpConfig = require('../config')
 
 
-var bowerPlugins = {
-  svg4everybody: 'svg4everybody/svg4everybody.js'
+var externalPlugins = {
+  svg4everybody: 'svg4everybody/svg4everybody.js',
+  myPlugin: 'plugin.js'
 }
 // substitutions for dependencies in some bower plugins
 // var bowerSubstitutions = {
@@ -35,7 +36,7 @@ module.exports = function(isDevelopment) {
       ],
     },
     module: {
-      noParse: Object.keys(bowerPlugins).map(function(k){return bowerPlugins[k]}),
+      noParse: Object.keys(externalPlugins).map(function(k){return externalPlugins[k]}),
       loaders: [{
         exclude: /node_modules/,
         loaders: [
@@ -77,8 +78,8 @@ module.exports = function(isDevelopment) {
       return plugins;
     })(),
     resolve: {
-      modulesDirectories: ['node_modules', 'bower_components'],
-      alias: bowerPlugins,
+      modulesDirectories: ['node_modules', 'bower_components', 'static/js/vendor'],
+      alias: externalPlugins,
       extensions: ['', '.js', '.jsx', '.json']
     }
   };
