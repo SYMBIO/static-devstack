@@ -1,7 +1,7 @@
 module.exports = {
 	assetsPath: 'static/',
 	outputPath: 'web/',
-	staticTemplatesFolder: 'templates',
+	staticTemplatesFolder: 'static',
 	imageFolder: 'img',
 	spritesFolder: 'sprites',
 	svgFolder: 'svg',
