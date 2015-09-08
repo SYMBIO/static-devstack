@@ -1,2 +1,4 @@
 node_modules
-*.styl
+bower_components
+web/
+!web/templates

@@ -1,0 +1,19 @@
+@import 'svg-symbols'
+@import 'img-sprite'
+
+html,
+body
+	height 100%
+	
+body
+	background yellow
+	
+.icon
+	display inline-block
+	
+.icon--youtube
+	sprite($icon_youtube_big)
+	
+// windows mobile bug fix
+@-ms-viewport
+	width device-width
