@@ -25,15 +25,14 @@ module.exports = function(isDevelopment) {
     debug: isDevelopment,
     devtool: isDevelopment ? 'eval-source-map' : '',
     entry: {
-      app: isDevelopment ? [
+      // this is entry just for other other files, entry point for main frontend file is below because of dynamic naming
+      backend: isDevelopment ? [
         'webpack-dev-server/client?http://localhost:8888',
-        // Why only-dev-server instead of dev-server:
-        // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
         'webpack/hot/only-dev-server',
-        './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
+        './static/js/backend.js'
       ] : [
-        './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
-      ],
+        './static/js/backend.js'
+      ]
     },
     module: {
       noParse: Object.keys(externalPlugins).map(function(k){return externalPlugins[k]}),
@@ -47,11 +46,11 @@ module.exports = function(isDevelopment) {
     },
     output: isDevelopment ? {
       path: path.join(__dirname, '/js/'),
-      filename: gulpConfig.mainJsFile + '.js',
+      filename: '[name].js',
       publicPath: 'http://localhost:8888/js/'
     } : {
       path: gulpConfig.outputPath + 'js/',
-      filename: gulpConfig.mainJsFile + '.js'
+      filename: '[name].js'
     },
     plugins: (function() {
       var plugins = [];
@@ -83,6 +82,16 @@ module.exports = function(isDevelopment) {
       extensions: ['', '.js', '.jsx', '.json']
     }
   };
+
+  config.entry[gulpConfig.mainJsFile] = isDevelopment ? [
+    'webpack-dev-server/client?http://localhost:8888',
+    // Why only-dev-server instead of dev-server:
+    // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
+    'webpack/hot/only-dev-server',
+    './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
+  ] : [
+    './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
+  ];
 
   return config;
 
