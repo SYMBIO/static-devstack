@@ -1,5 +1,5 @@
 import log from './log';
 
-$(document).ready(() => {
+window.onload = () => {
 	log('main backend file!');
-});
+};

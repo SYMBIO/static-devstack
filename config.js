@@ -7,5 +7,5 @@ module.exports = {
 	svgFolder: 'svg',
 	cssPreprocessor: 'styl',
 	mainCssFile: 'main',
-	mainJsFile: 'main'
+	mainJsFiles: ['main', 'backend']
 }
