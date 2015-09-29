@@ -25,14 +25,7 @@ module.exports = function(isDevelopment) {
     debug: isDevelopment,
     devtool: isDevelopment ? 'eval-source-map' : '',
     entry: {
-      // this is entry just for other other files, entry point for main frontend file is below because of dynamic naming
-      backend: isDevelopment ? [
-        'webpack-dev-server/client?http://localhost:8888',
-        'webpack/hot/only-dev-server',
-        './static/js/backend.js'
-      ] : [
-        './static/js/backend.js'
-      ]
+      // entry points below because of dynamic naming
     },
     module: {
       noParse: Object.keys(externalPlugins).map(function(k){return externalPlugins[k]}),
@@ -83,15 +76,17 @@ module.exports = function(isDevelopment) {
     }
   };
 
-  config.entry[gulpConfig.mainJsFile] = isDevelopment ? [
-    'webpack-dev-server/client?http://localhost:8888',
-    // Why only-dev-server instead of dev-server:
-    // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
-    'webpack/hot/only-dev-server',
-    './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
-  ] : [
-    './' + gulpConfig.assetsPath + 'js/' + gulpConfig.mainJsFile + '.js'
-  ];
+  gulpConfig.mainJsFiles.map(function(file, index) {
+    config.entry[file] = isDevelopment ? [
+      'webpack-dev-server/client?http://localhost:8888',
+      // Why only-dev-server instead of dev-server:
+      // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
+      'webpack/hot/only-dev-server',
+      './' + gulpConfig.assetsPath + 'js/' + file + '.js'
+    ] : [
+      './' + gulpConfig.assetsPath + 'js/' + file + '.js'
+    ];
+  });
 
   return config;
 

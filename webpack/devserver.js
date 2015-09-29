@@ -29,7 +29,11 @@ module.exports = function(webpackConfig) {
       // Callback is called only once, can't be used to catch compilation errors.
       if (err)
         throw new gutil.PluginError('webpack-dev-server', err);
-      gutil.log('[webpack-dev-server]', 'localhost:8888/js/' + config.mainJsFile + '.js');
+
+      config.mainJsFiles.map(function(file, index) {
+        gutil.log('[webpack-dev-server]', 'localhost:8888/js/' + file + '.js');
+      });
+
       callback();
     });
   };
