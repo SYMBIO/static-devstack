@@ -7,7 +7,6 @@ var gulpConfig = require('../config')
 
 
 var externalPlugins = {
-  svg4everybody: 'svg4everybody/svg4everybody.js',
   myPlugin: 'plugin.js'
 }
 // substitutions for dependencies in some bower plugins

@@ -5,4 +5,5 @@ import myPlugin from 'myPlugin';
 
 $(document).ready(() => {
 	log('it works!');
+  svg4everybody();
 });
