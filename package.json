@@ -19,6 +19,7 @@
     "gulp-svg-symbols": "^0.3.1",
     "gulp-util": "^3.0.4",
     "gulp.spritesmith": "^3.7.0",
+    "svg4everybody": "^2.0.0",
     "imagemin-pngquant": "^4.1.0",
     "jquery": "^2.1.4",
     "node-libs-browser": "^0.5.2",
