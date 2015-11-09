@@ -7,5 +7,8 @@ module.exports = {
 	svgFolder: 'svg',
 	cssPreprocessor: 'styl',
 	mainCssFile: 'main',
-	mainJsFiles: ['main', 'backend']
+	mainJsFiles: ['main', 'backend'],
+	localPort: 8888,
+	localJsFiles: ['web/static/index.html']
 }
+//localJsFiles: ['web/static/index.html', 'src/AppBundle/Resources/views/layout.html.twig'] 

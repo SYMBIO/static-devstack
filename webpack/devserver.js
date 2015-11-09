@@ -8,7 +8,7 @@ var config = require('../config')
 module.exports = function(webpackConfig) {
   return function(callback) {
     new WebpackDevServer(webpack(webpackConfig), {
-      contentBase: 'http://localhost:8888',
+      contentBase: 'http://localhost:' + config.localPort,
       hot: true,
       publicPath: webpackConfig.output.publicPath,
       // Unfortunately quiet swallows everything even error so it can't be used.
@@ -25,13 +25,13 @@ module.exports = function(webpackConfig) {
         chunks: false,
         chunkModules: false
       }
-    }).listen(8888, '0.0.0.0', function(err) {
+    }).listen(config.localPort, '0.0.0.0', function(err) {
       // Callback is called only once, can't be used to catch compilation errors.
       if (err)
         throw new gutil.PluginError('webpack-dev-server', err);
 
       config.mainJsFiles.map(function(file, index) {
-        gutil.log('[webpack-dev-server]', 'localhost:8888/js/' + file + '.js');
+        gutil.log('[webpack-dev-server]', 'localhost:' + config.localPort + '/js/' + file + '.js');
       });
 
       callback();

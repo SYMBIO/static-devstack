@@ -106,22 +106,93 @@ gulp.task('img-optimize', ['cleanup', 'img-sprite', 'svg-sprite'], function () {
     .pipe(gulp.dest(config.outputPath + config.imageFolder))
 })
 
+// get local ip
+var _ip = null;
+gulp.task('local-ip', function(){
+  var ifaces = os.networkInterfaces();
+  for (var dev in ifaces) {
+    if(dev != "en1" && dev != "en0") {
+      continue;
+    }
+    ifaces[dev].forEach(function(details){
+      if (details.family=='IPv4') {
+        _ip = details.address;
+      }
+    });
+  };
+});
+
+// set js path
+gulp.task('js-path', function(){
+  var host = _ip !== null ? 'http://' + _ip + ':' + config.localPort : '';
+  var scripts = [];
+  config.mainJsFiles.map(function(file, index){
+    scripts.push(host + '/js/' + file + '.js?v=' + new Date().getTime() );
+  });
+
+  gulp.src(config.localJsFiles, { base: './' })
+      .pipe(htmlreplace(
+        { js: scripts },
+        {
+          keepBlockTags: true,
+          resolvePaths: false
+        }
+      ))
+      .pipe(gulp.dest('.'));
+});
+
 // just function triggers
 gulp.task('images', ['img-optimize'])
 gulp.task('webpack-prod', webpackBuild(makeWebpackConfig(false)))
 gulp.task('webpack-dev', webpackDevServer(makeWebpackConfig(true)))
 
-gulp.task('default', ['browser-sync', 'images', 'css-dev', 'webpack-dev'], function() {
+gulp.task('default', ['local-ip', 'js-path', 'browser-sync', 'images', 'css-dev', 'webpack-dev'], function() {
   // watch css files and image files, js is watched automatically by webpack-dev-server
   gulp.watch(config.outputPath + config.staticTemplatesFolder + '/**/*.html').on('change', reload)
   gulp.watch(config.assetsPath + config.cssPreprocessor + '/**/*.' + config.cssPreprocessor, ['css-dev'])
-  gulp.watch([config.assetsPath + config.imageFolder + '/**/*.{jpg,jpeg,png,gif,svg}', 
+  
+  // watch png sprites
+  gulp.watch([config.assetsPath + config.imageFolder + '/' + config.spritesFolder + '/*']).on('change', function(){
+    gulp.start('img-sprite');
+  });
+
+  // watch svg sprites
+  gulp.watch([config.assetsPath + config.imageFolder + '/' + config.svgFolder + '/*']).on('change', function(){
+    gulp.start('svg-sprite');
+  });
+  
+  // watch all other images, except for generated sprite.png, sprite.svg and sprites/svg folders
+  gulp.watch([
+              config.assetsPath + config.imageFolder + '/**/*.{jpg,jpeg,png,gif,svg}', 
               '!' + config.assetsPath + config.imageFolder + '/sprite.png',
-              '!' + config.assetsPath + config.imageFolder + '/sprite.svg'], 
-              ['images'])
+              '!' + config.assetsPath + config.imageFolder + '/sprite.svg',
+              '!' + config.assetsPath + config.imageFolder + '/' + config.spritesFolder +'/',
+              '!' + config.assetsPath + config.imageFolder + '/' + config.spritesFolder +'/*',
+              '!' + config.assetsPath + config.imageFolder + '/' + config.svgFolder + '/',
+              '!' + config.assetsPath + config.imageFolder + '/' + config.svgFolder + '/*'
+            ]).on('change', function(file){
+
+              if(file.type === 'deleted'){
+                
+                gulp
+                .src(file.path)
+                .pipe(clean({force: true}))
+                .pipe( gulp.dest(config.outputPath + config.imageFolder) );
+
+              }else{
+                gulp
+                .src(file.path)
+                .pipe(imagemin({
+                    progressive: true,
+                    use: [pngquant()]
+                }))
+                .pipe( gulp.dest(config.outputPath + config.imageFolder) );
+              }
+
+            });
 })
 
-gulp.task('build', ['images', 'css-prod', 'webpack-prod'])
+gulp.task('build', ['js-path', 'images', 'css-prod', 'webpack-prod'])
 
 
 
