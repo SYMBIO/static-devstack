@@ -130,7 +130,7 @@ gulp.task('js-path', function(){
     scripts.push(host + '/js/' + file + '.js?v=' + new Date().getTime() );
   });
 
-  gulp.src(config.localJsFiles, { base: './' })
+  gulp.src(['src/**/*.twig', 'web/static/**/*.html'], { base: './' })
       .pipe(htmlreplace(
         { js: scripts },
         {
