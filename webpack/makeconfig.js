@@ -39,7 +39,7 @@ module.exports = function(isDevelopment) {
     output: isDevelopment ? {
       path: path.join(__dirname, '/js/'),
       filename: '[name].js',
-      publicPath: 'http://localhost:' + config.localPort + '/js/'
+      publicPath: 'http://localhost:' + gulpConfig.localPort + '/js/'
     } : {
       path: gulpConfig.outputPath + 'js/',
       filename: '[name].js'
@@ -77,7 +77,7 @@ module.exports = function(isDevelopment) {
 
   gulpConfig.mainJsFiles.map(function(file, index) {
     config.entry[file] = isDevelopment ? [
-      'webpack-dev-server/client?http://localhost:' + config.localPort,
+      'webpack-dev-server/client?http://localhost:' + gulpConfig.localPort,
       // Why only-dev-server instead of dev-server:
       // https://github.com/webpack/webpack/issues/418#issuecomment-54288041
       'webpack/hot/only-dev-server',
