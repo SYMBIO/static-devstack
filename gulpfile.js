@@ -1,8 +1,5 @@
 'use strict'
 
-var htmlreplace = require('gulp-html-replace');
-var os = require('os');
-
 var gulp = require('gulp')
 var plumber = require('gulp-plumber')
 var stylus = require('gulp-stylus')
