@@ -200,9 +200,6 @@ gulp.task('default', ['local-ip', 'js-path', 'browser-sync', 'images', 'css-dev'
                   }
                 }
 
-
-                console.log("SUB INDEX", subFolders);
-
                 gulp
                 .src(file.path)
                 .pipe(imagemin({
