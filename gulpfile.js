@@ -174,23 +174,46 @@ gulp.task('default', ['local-ip', 'js-path', 'browser-sync', 'images', 'css-dev'
               '!' + config.assetsPath + config.imageFolder + '/' + config.svgFolder + '/*'
             ]).on('change', function(file){
 
+              var outputFolder = config.outputPath + config.imageFolder;
+
               if(file.type === 'deleted'){
                 
                 gulp
                 .src(file.path)
                 .pipe(clean({force: true}))
-                .pipe( gulp.dest(config.outputPath + config.imageFolder) );
+                .pipe( gulp.dest(outputFolder) );
 
               }else{
+
+                var sourceFolder = config.assetsPath + config.imageFolder,
+                    folderIndex = file.path.indexOf(sourceFolder) + sourceFolder.length + 1,
+                    subFolders = file.path.substr(folderIndex).split('/');
+
+                if(subFolders.length > 1){
+
+                  var fileOffsetLen = subFolders.length - 1;
+                  if(subFolders[fileOffsetLen] == ''){
+                    fileOffsetLen = subFolders.length - 2;
+                  }
+                  for(var s = 0; s < fileOffsetLen; s++){
+                    outputFolder += '/' + subFolders[s];
+                  }
+                }
+
+
+                console.log("SUB INDEX", subFolders);
+
                 gulp
                 .src(file.path)
                 .pipe(imagemin({
                     progressive: true,
                     use: [pngquant()]
                 }))
-                .pipe( gulp.dest(config.outputPath + config.imageFolder) );
+                .pipe( gulp.dest(outputFolder) );
               }
 
+            }).on('error', function(){
+              console.log("File watch error...")
             });
 })
 
