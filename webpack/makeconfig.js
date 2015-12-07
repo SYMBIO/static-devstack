@@ -69,7 +69,7 @@ module.exports = function(isDevelopment) {
       return plugins;
     })(),
     resolve: {
-      modulesDirectories: ['node_modules', 'static/js/vendor'],
+      modulesDirectories: ['node_modules', 'bower_modules', gulpConfig.assetsPath + '/js/vendor'],
       alias: externalPlugins,
       extensions: ['', '.js', '.jsx', '.json']
     }

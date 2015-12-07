@@ -3,17 +3,17 @@
 
 html,
 body
-	height 100%
+	height: 100%
 	
 body
-	background yellow
+	background: yellow
 	
 .icon
-	display inline-block
+	display: inline-block
 	
 .icon--youtube
-	sprite($icon_youtube_big)
+	@include sprite($icon_youtube_big)
 	
 // windows mobile bug fix
 @-ms-viewport
-	width device-width
+	width: device-width

@@ -1,13 +1,13 @@
-module.exports = {
-	assetsPath: 'static/',
+export default {
+	assetsPath: 'frontend/',
 	outputPath: 'web/',
 	staticTemplatesFolder: 'static',
 	imageFolder: 'img',
 	spritesFolder: 'sprites',
 	svgFolder: 'svg',
-	cssPreprocessor: 'styl',
-	mainCssFile: 'main',
+	cssFolder: 'css',
+	cssPreprocessor: ['sass', 'scss'],
+	mainCssFiles: ['main'],
 	mainJsFiles: ['main', 'backend'],
 	localPort: 8888
 }
-//localJsFiles: ['web/static/index.html', 'src/AppBundle/Resources/views/layout.html.twig'] 
