@@ -150,9 +150,9 @@ gulp.task('js-path', () => {
     scripts.push(host + '/js/' + file + '.js?v=' + new Date().getTime() );
   });
 
-  gulp.src(['src/**/*.twig', 
+  gulp.src(['src/**/*.twig',
             `${config.assetsPath}jade/*.jade`,
-            `${config.outputPath}${config.staticTemplatesFolder}/**/*.html`], 
+            `${config.outputPath}${config.staticTemplatesFolder}/**/*.html`],
             { base: './' })
 
         .pipe(htmlreplace(
@@ -164,17 +164,6 @@ gulp.task('js-path', () => {
         ))
         .pipe(gulp.dest('.'));
 });
-
-// const jadeVars = {};
-// gulp.task('jade', () => {
-//   gulp.src([`${config.assetsPath}jade/**/*.jade`])
-//     .pipe(plumber())
-//     .pipe(jade({
-//       locals: jadeVars,
-//       pretty: true
-//     }))
-//     .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
-// });
 
 // just function triggers
 gulp.task('images', ['img-optimize']);
@@ -192,23 +181,17 @@ gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev']
 
   // watch jade
   gulp.watch([`${config.assetsPath}jade/**/*.jade`]).on('change', (file) => {
-    // if( file.type !== 'deleted' ) {
+      let locals = {};
       gulp
         .src(file.path)
         .pipe(plumber())
         .pipe(jade({
-          locals: jadeVars,
+          locals: locals,
           pretty: true
         }))
         .pipe( gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`) );
-    // }
-    // else {
-    //   const fileParts = file.path.split('/');
-    //   const fileName = fileParts[fileParts.length - 1].replace('jade', 'html');
-    //   del([file.path, `${config.outputPath}${config.staticTemplatesFolder}/${fileName}`]);
-    // }
   });
-  
+
   // watch png sprites
   gulp.watch([`${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`]).on('change', () => {
     runSequence(['img-sprite']);
@@ -218,9 +201,9 @@ gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev']
   gulp.watch([`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`]).on('change', () => {
     runSequence(['svg-sprite']);
   });
-  
+
   // watch all other images, except for generated sprite.png, sprite.svg and sprites/svg folders
-  gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`, 
+  gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
               `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/`,
