@@ -220,21 +220,35 @@ gulp.task('default', ['local-ip', 'js-path', 'jade', 'images', 'css-dev', 'webpa
   
   // watch all other images, except for generated sprite.png, sprite.svg and sprites/svg folders
   gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`, 
-              `!${config.assetsPath}${config.imageFolder}/sprite.png`,
-              `!${config.assetsPath}${config.imageFolder}/sprite.svg`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
               `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/`,
               `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`])
             .on('change', (file) => {
               if(file.type !== 'deleted') {
+
+                var sourceFolder = config.assetsPath + config.imageFolder,
+                    folderIndex = file.path.indexOf(sourceFolder) + sourceFolder.length + 1,
+                    subFolders = file.path.substr(folderIndex).split('/');
+
+                if(subFolders.length > 1){
+
+                  var fileOffsetLen = subFolders.length - 1;
+                  if(subFolders[fileOffsetLen] == ''){
+                    fileOffsetLen = subFolders.length - 2;
+                  }
+                  for(var s = 0; s < fileOffsetLen; s++){
+                    outputFolder += '/' + subFolders[s];
+                  }
+                }
+
                 gulp
-                  .src(file.path)
-                  .pipe(imagemin({
-                      progressive: true,
-                      use: [pngquant()]
-                  }))
-                  .pipe( gulp.dest(`${config.outputPath}${config.imageFolder}`) );
+                .src(file.path)
+                .pipe(imagemin({
+                    progressive: true,
+                    use: [pngquant()]
+                }))
+                .pipe( gulp.dest(outputFolder) );
               }
             });
 });
