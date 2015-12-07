@@ -165,23 +165,23 @@ gulp.task('js-path', () => {
         .pipe(gulp.dest('.'));
 });
 
-const jadeVars = {};
-gulp.task('jade', () => {
-  gulp.src([`${config.assetsPath}jade/**/*.jade`])
-    .pipe(plumber())
-    .pipe(jade({
-      locals: jadeVars,
-      pretty: true
-    }))
-    .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
-});
+// const jadeVars = {};
+// gulp.task('jade', () => {
+//   gulp.src([`${config.assetsPath}jade/**/*.jade`])
+//     .pipe(plumber())
+//     .pipe(jade({
+//       locals: jadeVars,
+//       pretty: true
+//     }))
+//     .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
+// });
 
 // just function triggers
 gulp.task('images', ['img-optimize']);
 gulp.task('webpack-prod', webpackBuild(makeWebpackConfig(false)));
 gulp.task('webpack-dev', webpackDevServer(makeWebpackConfig(true)));
 
-gulp.task('default', ['local-ip', 'js-path', 'jade', 'images', 'css-dev', 'webpack-dev'], () => {
+gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev'], () => {
   if( args.sync ) {
     runSequence(['browser-sync']);
     gulp.watch(`${config.outputPath}${config.staticTemplatesFolder}/**/*.html`).on('change', reload);
@@ -192,7 +192,7 @@ gulp.task('default', ['local-ip', 'js-path', 'jade', 'images', 'css-dev', 'webpa
 
   // watch jade
   gulp.watch([`${config.assetsPath}jade/**/*.jade`]).on('change', (file) => {
-    if( file.type !== 'deleted' ) {
+    // if( file.type !== 'deleted' ) {
       gulp
         .src(file.path)
         .pipe(plumber())
@@ -201,11 +201,12 @@ gulp.task('default', ['local-ip', 'js-path', 'jade', 'images', 'css-dev', 'webpa
           pretty: true
         }))
         .pipe( gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`) );
-    } else {
-      const fileParts = file.path.split('/');
-      const fileName = fileParts[fileParts.length - 1].replace('jade', 'html');
-      del([file.path, `${config.outputPath}${config.staticTemplatesFolder}/${fileName}`]);
-    }
+    // }
+    // else {
+    //   const fileParts = file.path.split('/');
+    //   const fileName = fileParts[fileParts.length - 1].replace('jade', 'html');
+    //   del([file.path, `${config.outputPath}${config.staticTemplatesFolder}/${fileName}`]);
+    // }
   });
   
   // watch png sprites
@@ -253,7 +254,7 @@ gulp.task('default', ['local-ip', 'js-path', 'jade', 'images', 'css-dev', 'webpa
             });
 });
 
-gulp.task('build', ['js-path', 'jade', 'images', 'css-prod', 'webpack-prod'])
+gulp.task('build', ['js-path', 'jade', 'images', 'css-prod', 'webpack-prod']);
 
 
 
