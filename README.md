@@ -1,5 +1,5 @@
 # static-sandbox
-* make sure you have gulp v3.9.0 at least, if not - 'sudo npm i -g gulp'
+* 'sudo npm i -g gulp' - skip this step if you run gulp v3.9.0 at least
 * 'sudo npm i'
 * 'gulp' - dev mode
 * 'gulp -s' / 'gulp --sync' - dev mode with browser sync
