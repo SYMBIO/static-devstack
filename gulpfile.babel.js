@@ -254,7 +254,7 @@ gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev']
             });
 });
 
-gulp.task('build', ['js-path', 'jade', 'images', 'css-prod', 'webpack-prod']);
+gulp.task('build', ['js-path', 'images', 'css-prod', 'webpack-prod']);
 
 
 
