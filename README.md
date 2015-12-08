@@ -4,3 +4,6 @@
 * 'gulp' - dev mode
 * 'gulp -s' / 'gulp --sync' - dev mode with browser sync
 * 'gulp build' - production build
+
+ **TODO: fill in description in main css file (project, author,etc.)**
+
