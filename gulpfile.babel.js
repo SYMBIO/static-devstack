@@ -76,6 +76,19 @@ gulp.task('css-prod', () => {
     .pipe(gulp.dest(`${config.outputPath}css`));
 });
 
+// jade
+gulp.task('jade', function() {
+  var YOUR_LOCALS = {};
+
+  gulp.src(`${config.assetsPath}jade/**/*.jade`)
+    .pipe(plumber())
+    .pipe(jade({
+      locals: YOUR_LOCALS,
+      pretty: true
+    }))
+    .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`))
+});
+
 // png sprite
 gulp.task('img-sprite', () => {
   var spriteData = gulp.src(`${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*.png`)
@@ -173,24 +186,14 @@ gulp.task('webpack-dev', webpackDevServer(makeWebpackConfig(true)));
 gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev'], () => {
   if( args.sync ) {
     runSequence(['browser-sync']);
-    gulp.watch(`${config.outputPath}${config.staticTemplatesFolder}/**/*.html`).on('change', reload);
+    gulp.watch(`${config.outputPath}${config.staticTemplatesFolder}/*.html`).on('change', reload);
   }
+
+  // watch jade
+  gulp.watch(`${config.assetsPath}jade/**/*.jade`, ['jade']);
 
   // watch css
   gulp.watch(`${config.assetsPath}${config.cssFolder}/**/*.{${config.cssPreprocessor.join(',')}}`, ['css-dev']);
-
-  // watch jade
-  gulp.watch([`${config.assetsPath}jade/**/*.jade`]).on('change', (file) => {
-      let locals = {};
-      gulp
-        .src(file.path)
-        .pipe(plumber())
-        .pipe(jade({
-          locals: locals,
-          pretty: true
-        }))
-        .pipe( gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`) );
-  });
 
   // watch png sprites
   gulp.watch([`${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`]).on('change', () => {
