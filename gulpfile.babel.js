@@ -216,7 +216,8 @@ gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev']
 
                 var sourceFolder = config.assetsPath + config.imageFolder,
                     folderIndex = file.path.indexOf(sourceFolder) + sourceFolder.length + 1,
-                    subFolders = file.path.substr(folderIndex).split('/');
+                    subFolders = file.path.substr(folderIndex).split('/'),
+                    outputFolder = config.outputPath + config.imageFolder;
 
                 if(subFolders.length > 1){
 
