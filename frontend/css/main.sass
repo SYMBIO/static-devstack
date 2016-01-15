@@ -28,7 +28,13 @@ body
 	display: inline-block
 
 .icon--youtube
-	@include sprite($icon_youtube_big)
+	+retina-sprite($icon_youtube-big-group)
+
+.icon--facebook
+	+retina-sprite($icon_facebook-big-group)
+
+.icon--twitter
+	+retina-sprite($icon_twitter-big-group)
 
 // windows mobile bug fix
 @-ms-viewport

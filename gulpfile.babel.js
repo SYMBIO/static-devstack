@@ -37,7 +37,7 @@ const getCssSrcArray = () => {
   });
 
   return retArr;
-}
+};
 
 gulp.task('browser-sync', () => {
     browserSync.init({
@@ -51,7 +51,7 @@ gulp.task('browser-sync', () => {
 // clean image folder
 gulp.task('cleanup', () => {
   return del([`${config.outputPath}${config.imageFolder}`]);
-})
+});
 
 // development css
 gulp.task('css-dev', () => {
@@ -93,10 +93,13 @@ gulp.task('jade', function() {
 gulp.task('img-sprite', () => {
   var spriteData = gulp.src(`${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*.png`)
     .pipe(spritesmith({
+        retinaSrcFilter: [`${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*_2x.png`],
         imgName: 'sprite.png',
+        retinaImgName: 'sprite_2x.png',
         cssName: 'img-sprite.sass',
         algorithm: 'binary-tree',
         imgPath: '../' + config.imageFolder + '/sprite.png?v=' + Date.now(),
+        retinaImgPath: '../' + config.imageFolder + '/sprite_2x.png?v=' + Date.now(),
         padding: 10
     }));
 
