@@ -6,6 +6,9 @@
 * `gulp build` - production build
 * **TODO: fill in description in main css file (project, author,etc.)**
 
+## SASS
+[Normalize.css](https://www.npmjs.com/package/normalize.css-importable), [Bourbon](http://bourbon.io/) and [Neat](http://neat.bourbon.io/) are included and linked in main Sass file.
+
 ## Retina sprites
 Sprites are set to generate retina variant too.
 But you has to follow these rules, otherwise will gulp task fail:
