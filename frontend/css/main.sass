@@ -14,6 +14,16 @@
  * Support:
  */
 
+// NORMALIZE
+@import "../../node_modules/normalize.css-importable/normalize"
+
+// BOURBON & NEAT
+@import "../../node_modules/bourbon/app/assets/stylesheets/bourbon"
+@import "../../node_modules/bourbon-neat/app/assets/stylesheets/neat-helpers"
+// This file has to be imported before main Neat file if you want set default max-width or other grid variables.
+@import "vaiables"
+@import "../../node_modules/bourbon-neat/app/assets/stylesheets/neat"
+
 @import 'svg-symbols'
 @import 'img-sprite'
 
@@ -28,7 +38,13 @@ body
 	display: inline-block
 
 .icon--youtube
-	@include sprite($icon_youtube_big)
+	+retina-sprite($icon_youtube-big-group)
+
+.icon--facebook
+	+retina-sprite($icon_facebook-big-group)
+
+.icon--twitter
+	+retina-sprite($icon_twitter-big-group)
 
 // windows mobile bug fix
 @-ms-viewport
