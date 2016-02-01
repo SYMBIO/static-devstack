@@ -3,3 +3,8 @@ bower_components
 web/
 !web/static
 .idea
+.DS_Store
+._*
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
