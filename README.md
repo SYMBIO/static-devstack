@@ -18,5 +18,5 @@ But you has to follow these rules, otherwise will gulp task fail:
 
 ## Create local app
 You can build whole app using nw (formerly node-webkit). Just run:
-> gulp build-app
-> npm start
+* gulp build-app
+* npm start
