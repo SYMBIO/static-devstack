@@ -19,16 +19,17 @@ html(lang="cs")
     meta(property="og:description" content="")
     meta(property="og:image" content="")
 
-    link(rel="stylesheet" href="/css/main.css")
+    link(rel="stylesheet" href=basepath+"css/main.css")
   body
     svg.icon.icon--logo-white
-      use(xlink:href="/img/sprite.svg#logo-white")
+      use(xlink:href=basepath+"img/sprite.svg#logo-white")
 
     i.icon.icon--youtube
     i.icon.icon--facebook
     i.icon.icon--twitter
 
-    <!-- build:js -->
-    <script src="http://172.17.12.11:8888/js/main.js?v=1452855068892"></script>
-    <script src="http://172.17.12.11:8888/js/backend.js?v=1452855068892"></script>
-    <!-- endbuild -->
+    //- build:js /js/app.js
+    block scripts
+      script(src=basepath+'js/main.js?v=1457544311012')
+      script(src=basepath+'js/backend.js?v=1457544311012')
+    //- endbuild

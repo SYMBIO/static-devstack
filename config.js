@@ -1,6 +1,7 @@
 export default {
 	assetsPath: 'frontend/',
 	outputPath: 'web/',
+	baseWebPath: '/',
 	staticTemplatesFolder: 'static',
 	imageFolder: 'img',
 	spritesFolder: 'sprites',
@@ -9,5 +10,7 @@ export default {
 	cssPreprocessor: ['sass', 'scss'],
 	mainCssFiles: ['main'],
 	mainJsFiles: ['main', 'backend'],
-	localPort: 8888
+	localPort: 8888,
+	appOutputPath: 'app/',
+	baseAppPath: ''
 }
