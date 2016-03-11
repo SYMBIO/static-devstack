@@ -1,8 +1,8 @@
 {
   "name": "symbio-devstack",
-  "version": "0.2.0",
-  "author": "Peter Hiža",
-  "description": "Symbio Frontend starter kit",
+  "version": "0.2.1",
+  "author": "SYMBIO Digital",
+  "description": "SYMBIO Frontend starter kit",
   "main": "gulpfile.js",
   "dependencies": {
     "babel": "^5.4.7",
@@ -29,6 +29,7 @@
     "node-libs-browser": "^0.5.2",
     "node-notifier": "^4.2.1",
     "normalize.css-importable": "^3.0.3",
+    "nw": "^0.12.3",
     "run-sequence": "^0.3.2",
     "svg4everybody": "^2.0.0",
     "vinyl": "^0.4.6",
@@ -37,7 +38,8 @@
     "yargs": "^3.30.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nw app"
   },
   "repository": {
     "type": "git",

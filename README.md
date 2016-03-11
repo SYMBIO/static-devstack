@@ -16,4 +16,7 @@ But you has to follow these rules, otherwise will gulp task fail:
 * Retina version has to be **exactly** double sized in compare to regular version.
 * In mixin `@include retine-sprite()` you has to use `-global` variable (for ex. `$some-icon-global`).
 
-
+## Create local app
+You can build whole app using nw (formerly node-webkit). Just run:
+* gulp build-app
+* npm start

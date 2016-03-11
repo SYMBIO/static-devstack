@@ -83,10 +83,18 @@ gulp.task('jade', function() {
   gulp.src(`${config.assetsPath}jade/**/*.jade`)
     .pipe(plumber())
     .pipe(jade({
-      locals: YOUR_LOCALS,
+      locals: { basepath: config.baseWebPath },
       pretty: true
     }))
     .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`))
+
+  gulp.src(`${config.assetsPath}jade/**/*.jade`)
+    .pipe(plumber())
+    .pipe(jade({
+      locals: { basepath: config.baseAppPath },
+      pretty: true
+    }))
+  .pipe(gulp.dest(`${config.appOutputPath}`))
 });
 
 // png sprite
@@ -163,7 +171,7 @@ gulp.task('js-path', () => {
   var host = _ip !== null ? 'http://' + _ip + ':' + config.localPort : '';
   var scripts = [];
   config.mainJsFiles.map((file, index) => {
-    scripts.push(host + '/js/' + file + '.js?v=' + new Date().getTime() );
+    scripts.push(host + config.baseWebPath + 'js/' + file + '.js?v=' + new Date().getTime());
   });
 
   gulp.src(['src/**/*.twig',
@@ -246,6 +254,24 @@ gulp.task('default', ['local-ip', 'js-path', 'images', 'css-dev', 'webpack-dev']
 
 gulp.task('build', ['js-path', 'images', 'css-prod', 'webpack-prod']);
 
+gulp.task('clean-app', () => {
+    return del([`${config.appOutputPath}`]);
+});
 
+gulp.task('prepare-app', ['jade','build'], () => {
 
+    gulp.src([`./package.app.json`])
+        .pipe(rename({ basename: 'package' }))
+        .pipe(gulp.dest(`${config.appOutputPath}`));
 
+    gulp.src([`${config.outputPath}css/*.css`])
+        .pipe(gulp.dest(`${config.appOutputPath}css`));
+
+    gulp.src([`${config.outputPath}js/*.js`])
+        .pipe(gulp.dest(`${config.appOutputPath}js`));
+
+    gulp.src([`${config.outputPath}img/*.*`])
+        .pipe(gulp.dest(`${config.appOutputPath}img`));
+});
+
+gulp.task('build-app', ['clean-app', 'prepare-app']);

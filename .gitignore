@@ -1,6 +1,7 @@
 node_modules
 bower_components
 web/
+app/
 !web/static
 .idea
 .DS_Store
