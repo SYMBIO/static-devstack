@@ -1,0 +1,14 @@
+extends ./layout.pug
+
+block title
+    title Homepage
+
+block content
+
+    include ./includes/header.pug
+
+    .social
+        i.fb
+        i.tw
+    svg(class="icon--logo")
+        use(xlink:href="/img/sprite.svg#logo")

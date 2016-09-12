@@ -1,0 +1,51 @@
+/*==========================================================================
+  Base
+  ==========================================================================*/
+
+:root
+  --mainColor: green
+
+@custom-media --only-medium-screen (width >= 500px) and (width <= 1200px)
+
+* , *:before , *:after
+    box-sizing: border-box
+
+*
+    margin: 0
+    padding: 0
+
+@-ms-viewport
+    width: device-width
+
+html
+    font-size: 100%
+    line-height: 1.5
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
+
+body
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    height: 100vh
+    @media (--only-medium-screen)
+        background-color: var(--mainColor)
+
+.social
+    position: absolute
+    bottom: 15px
+    right: 15px
+    i
+        display: inline-block
+        margin: 0 2px
+
+/* png sprite + postcss-assets usage */
+.fb
+    width: width($imgPath + 'png/icon-fb.png')
+    height: height($imgPath + 'png/icon-fb.png')
+    background-image: url($imgPath + 'png/icon-fb.png')
+
+.tw
+    width: width($imgPath + 'png/icon-tw.png')
+    height: height($imgPath + 'png/icon-tw.png')
+    background-image: url($imgPath + 'png/icon-tw.png')

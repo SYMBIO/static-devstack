@@ -1,0 +1,58 @@
+/*==========================================================================
+  Typography
+  ==========================================================================*/
+
+@font-face {
+    font-family: 'roboto-condescend';
+    src: url('../font/roboto-condensed/robotocondensed-light-webfont.eot');
+    src: url('../font/roboto-condensed/robotocondensed-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/roboto-condensed/robotocondensed-light-webfont.woff2') format('woff2'),
+         url('../font/roboto-condensed/robotocondensed-light-webfont.woff') format('woff'),
+         url('../font/roboto-condensed/robotocondensed-light-webfont.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'roboto-condescend';
+    src: url('../font/roboto-condensed/robotocondensed-regular-webfont.eot');
+    src: url('../font/roboto-condensed/robotocondensed-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/roboto-condensed/robotocondensed-regular-webfont.woff2') format('woff2'),
+         url('../font/roboto-condensed/robotocondensed-regular-webfont.woff') format('woff'),
+         url('../font/roboto-condensed/robotocondensed-regular-webfont.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'roboto-condescend';
+    src: url('../font/roboto-condensed/robotocondensed-bold-webfont.eot');
+    src: url('../font/roboto-condensed/robotocondensed-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/roboto-condensed/robotocondensed-bold-webfont.woff2') format('woff2'),
+         url('../font/roboto-condensed/robotocondensed-bold-webfont.woff') format('woff'),
+         url('../font/roboto-condensed/robotocondensed-bold-webfont.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+h1,h2,h3,h4 {
+    font-weight: normal
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block
+}
+
+img, picture {
+    display: block
+}
+
+ul {
+    padding: 0
+}
+
+li {
+    list-style: none;
+}

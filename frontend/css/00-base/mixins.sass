@@ -1,0 +1,62 @@
+/*==========================================================================
+  Mixins + functions
+  ==========================================================================*/
+
+// Media query
+// -------------------------
+=bp($size)
+    @media only print, only screen and (min-width: $size)
+        @content
+
+=bpmax($size)
+    @media only print, only screen and (max-width: $size)
+        @content
+
+=print()
+    @media only print
+        @content
+
+// Sizing shortcuts
+// -------------------------
+=size($width, $height)
+    width: #{$width}px
+    height: #{$height}px
+
+=square($size)
+    +size($size, $size)
+
+// Font family
+// -------------------------
+=ff($name)
+    font-family: $name, Arial, sans-serif
+
+// Font size
+// -------------------------
+$base-font-size: 16
+
+=fz($fontValue)
+    $rem: ($fontValue / $base-font-size)
+    font-size: #{$fontValue}px
+    font-size: #{$rem}rem
+
+// List horizontal
+// -------------------------
+=lh()
+    li
+        display: inline-block
+        list-style-type: none
+
+// Hide text
+// -------------------------
+=ht()
+    text-indent: 100%
+    white-space: nowrap
+    overflow: hidden
+
+// Clearfix
+// -------------------------
+=cf
+    &:after
+        content: ""
+        display: table
+        clear: both
