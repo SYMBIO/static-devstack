@@ -171,9 +171,9 @@ gulp.task('svg-sprite', () => {
             path.dirname = './'
             path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder
             path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols'
-            path.extname = (path.extname === '.svg') ? '.svg' : '.css'
+            path.extname = (path.extname === '.svg') ? '.svg' : '.scss'
         }))
-        .pipe(gulp.dest(config.outputPath));
+        .pipe(gulp.dest(config.assetsPath));
 });
 
 /***
@@ -226,12 +226,13 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
     // prettify html templates from pug
     // gulp.watch(`${config.assetsPath}${config.staticTemplatesFolder}/*.html`, ['prettify']);
 
-    // watch images except sprites
+    // watch images except sprites folders
     gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
               `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/`,
-              `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`])
+              `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`,
+              `!${config.assetsPath}${config.imageFolder}/sprite.svg`])
         .on('change', (file) => {
             if(file.type !== 'deleted') {
                 var sourceFolder = config.assetsPath + config.imageFolder,
@@ -257,7 +258,10 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
 
     // watch svg sprites
     gulp.watch([`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`]).on('change', () => {
-        runSequence(['svg-sprite']);
+        runSequence(['svg-sprite'], function() {
+            gulp.src(`${config.assetsPath}${config.imageFolder}/sprite.svg`)
+                .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}`));
+        });
     });
 });
 
@@ -268,7 +272,3 @@ gulp.task('build', ['pug','webpack-prod','css-prod','images'], () => {
     runSequence(['prettify']);
     // runSequence(['webp','prettify']);
 });
-
-
-
-
