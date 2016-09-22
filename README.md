@@ -15,7 +15,7 @@ Personal devstack including:
 
 ### Installation
 ```sh
-$ git clone https://github.com/pavelsuraba/devstack.git
+$ git clone https://github.com/SYMBIO/static-sandbox.git
 $ npm i
 ```
 
