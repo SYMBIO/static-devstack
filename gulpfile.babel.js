@@ -15,6 +15,8 @@ import runSequence       from 'run-sequence';
 import gutil             from 'gulp-util';
 import prettify          from 'gulp-html-prettify';
 import webp              from 'gulp-webp';
+import parker            from 'gulp-parker';
+import notify            from 'gulp-notify';
 
 import postcss           from 'gulp-postcss';
 import cssnext           from 'postcss-cssnext';
@@ -93,7 +95,16 @@ gulp.task('css-dev', () => {
     const cssFilesArray = getCssSrcArray();
     return gulp.src(cssFilesArray)
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass())
+        .on('error', function(err) {
+            notify({
+                title:    "Sass",
+                subtitle: "What've you done now?!",
+                message:  err,
+                sound:    "Beep"
+            }).write(err);
+            this.emit('end');
+        })
         .pipe(postcss(processors))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(`${config.outputPath}css`))
@@ -123,6 +134,15 @@ gulp.task('pug', () => {
             locals: YOUR_LOCALS,
             pretty: true
         }))
+        .on('error', function(err) {
+            notify({
+                title:    "Pug",
+                subtitle: "What've you done now?!",
+                message:  err,
+                sound:    "Beep"
+            }).write(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest(`${config.assetsPath}${config.staticTemplatesFolder}`))
         .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
 });
@@ -271,4 +291,12 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
 gulp.task('build', ['pug','webpack-prod','css-prod','images'], () => {
     runSequence(['prettify']);
     // runSequence(['webp','prettify']);
+});
+
+/***
+* CSS ANALYSIS TOOL - PARKER
+*/
+gulp.task('stats', function() {
+    return gulp.src(`${config.outputPath}css/style.css`)
+        .pipe(parker());
 });
