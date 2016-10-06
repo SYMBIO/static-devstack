@@ -9,7 +9,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loaders: ['babel-loader','webpack-module-hot-accept']
+                loaders: ['babel-loader']
             },
         ]
     },
