@@ -22,8 +22,8 @@ import postcss           from 'gulp-postcss';
 import cssnext           from 'postcss-cssnext';
 import cssassets         from 'postcss-assets';
 import cssnano           from 'gulp-cssnano';
+import sprites           from 'postcss-sprites';
 
-const sprites   = require('postcss-sprites').default;
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const browserSync = require('browser-sync').create();
