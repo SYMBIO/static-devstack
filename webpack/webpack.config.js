@@ -16,6 +16,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loaders: ['babel-loader','webpack-module-hot-accept']
             },
+            { test: /\.json$/, loader: 'json' }
         ]
     },
     output: {

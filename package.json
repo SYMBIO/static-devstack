@@ -1,6 +1,6 @@
 {
   "name": "symbio-devstack",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": "SYMBIO Digital",
   "description": "SYMBIO Frontend starter kit",
   "license": "MIT",
@@ -11,22 +11,22 @@
   },
   "dependencies": {
     "babel": "^6.5.2",
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
-    "babel-preset-es2015": "^6.18.0",
-    "gulp": "^3.9.1",
-    "gulp-plumber": "^1.1.0",
-    "gulp-pug": "^3.2.0",
-    "gulp-util": "^3.0.7",
+    "babel-preset-latest": "^6.16.0",
     "jquery": "^3.1.0",
+    "json-loader": "^0.5.4",
     "pug": "^2.0.0-beta5",
-    "webpack": "^1.13.3",
-    "webpack-dev-server": "^1.16.2"
+    "svg4everybody": "^2.1.3"
   },
   "devDependencies": {
     "browser-sync": "^2.18.2",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.2.0",
+    "gulp-util": "^3.0.7",    
     "gulp-cssnano": "^2.1.2",
     "gulp-html-prettify": "0.0.1",
     "gulp-imagemin": "^3.1.1",
@@ -43,7 +43,8 @@
     "postcss-cssnext": "^2.9.0",
     "postcss-sprites": "^4.1.0",
     "run-sequence": "^1.2.2",
-    "svg4everybody": "^2.1.3",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",    
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2",
     "webpack-module-hot-accept": "^1.0.4"
