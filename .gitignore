@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .sass-cache
 Thumbs.db
+.idea
 
 /web/bundles/
 /app/bootstrap.php.cache
