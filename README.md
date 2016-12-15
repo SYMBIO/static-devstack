@@ -1,7 +1,7 @@
 # SYMBIO static-devstack
 
 ### Version
-0.3.0
+0.4.1
 
 ### Description
 Personal devstack including:
