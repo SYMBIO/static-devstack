@@ -4,7 +4,7 @@
 0.4.1
 
 ### Description
-Personal devstack including:
+Frontend static devstack including:
 * [Webpack](https://webpack.github.io/) a module bundler
 * [Hot Module Replacement](https://webpack.github.io/docs/hot-module-replacement.html) (HMR) is a feature to inject updated modules into the active runtime
 * [Gulp](http://gulpjs.com/) a JavaScript task manager
@@ -15,7 +15,7 @@ Personal devstack including:
 
 ### Installation
 ```sh
-$ git clone https://github.com/SYMBIO/static-sandbox.git
+$ git clone https://github.com/SYMBIO/static-devstack.git
 $ npm i
 ```
 
