@@ -23,6 +23,10 @@ module.exports = {
         path: path.join(constants.DIST_DIR, 'js')
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'PRODUCTION': JSON.stringify(false),
+            'process.env.NODE_ENV': JSON.stringify('development')
+        }),        
     ]
 };
