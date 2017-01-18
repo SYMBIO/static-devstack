@@ -6,7 +6,6 @@
  */
 
 html {
-  // font-family: sans-serif; /* 1 */
   -ms-text-size-adjust: 100%; /* 2 */
   -webkit-text-size-adjust: 100%; /* 2 */
 }
@@ -143,16 +142,6 @@ strong {
 dfn {
   font-style: italic;
 }
-
-/**
- * Correct the font size and margin on `h1` elements within `section` and
- * `article` contexts in Chrome, Firefox, and Safari.
- */
-
-// h1 {
-//   font-size: 2em;
-//   margin: 0.67em 0;
-// }
 
 /**
  * Add the correct background and color in IE 9-.

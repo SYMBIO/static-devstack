@@ -1,6 +1,5 @@
 import gulp              from 'gulp';
 import config            from './config';
-import sass              from 'gulp-sass';
 import sourcemaps        from 'gulp-sourcemaps';
 import webpackConfigDev  from './webpack/webpack.config';
 import webpackConfigProd from './webpack/webpack.config.prod';
@@ -18,17 +17,21 @@ import webp              from 'gulp-webp';
 import parker            from 'gulp-parker';
 import notify            from 'gulp-notify';
 
+/* postcss plugins */
 import postcss           from 'gulp-postcss';
 import cssnext           from 'postcss-cssnext';
 import cssassets         from 'postcss-assets';
 import cssnano           from 'gulp-cssnano';
+import precss            from 'precss';
+import sugarss           from 'sugarss';
+import easyImport        from 'postcss-easy-import';
+import calc              from 'postcss-math';
 import sprites           from 'postcss-sprites';
 
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
-
 const bundler = webpack(webpackConfigDev);
 
 gulp.task('browser-sync', () => {
@@ -55,25 +58,19 @@ gulp.task('browser-sync', () => {
     });
 });
 
-// because of multiple extensions possibility [sass,scss]
-const getCssSrcArray = () => {
-    let retArr = [];
-
-    config.mainCssFiles.map((cssFile) => {
-        config.cssPreprocessor.map((preprocessor) => {
-            retArr.push(`${config.assetsPath}${config.cssFolder}/${cssFile}.${preprocessor}`);
-        });
-    });
-
-    return retArr;
-};
-
-// postCSS plugins
-const processors = [
+/* postcss plugins */
+const postCSSplugins = [
+    easyImport(),
+    precss(),
     cssnext({ browsers: ['last 2 versions', 'iOS 7', 'ie 10-11', 'Safari 8'] }),
     cssassets({
         cachebuster: true,
-        loadPaths: [`../${config.imageFolder}/`]
+        loadPaths: [
+            `./${config.assetsPath}${config.imageFolder}/png/`,
+            `./${config.assetsPath}${config.imageFolder}/png-src/`,
+            `./${config.assetsPath}${config.imageFolder}/jpg/`,
+            `./${config.assetsPath}${config.imageFolder}/svg/`
+        ]
     }),
     sprites({
         stylesheetPath: `${config.outputPath}${config.cssFolder}`,
@@ -92,22 +89,20 @@ const processors = [
 * CSS-dev
 */
 gulp.task('css-dev', () => {
-    const cssFilesArray = getCssSrcArray();
-    return gulp.src(cssFilesArray)
+    return gulp.src(`${config.assetsPath}css/style.sss`)
         .pipe(sourcemaps.init())
-        .pipe(sass())
+        .pipe(postcss( postCSSplugins, {parser: sugarss} ))
         .on('error', function(err) {
             notify({
-                title:    "Sass",
-                subtitle: "What've you done now?!",
-                message:  err,
-                sound:    "Beep"
+                title: "css",
+                message: err,
+                sound: "Beep"
             }).write(err);
             this.emit('end');
-        })
-        .pipe(postcss(processors))
+        })        
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(`${config.outputPath}css`))
+        .pipe(rename({ extname: '.css' }))
+        .pipe(gulp.dest(`${config.outputPath}css/`))
         .pipe(browserSync.stream());
 });
 
@@ -115,12 +110,11 @@ gulp.task('css-dev', () => {
 * CSS-prod
 */
 gulp.task('css-prod', () => {
-    const cssFilesArray = getCssSrcArray();
-    return gulp.src(cssFilesArray)
-        .pipe(sass())
-        .pipe(postcss(processors))
+    return gulp.src(`${config.assetsPath}css/style.sss`)
+        .pipe(postcss( postCSSplugins, {parser: sugarss} ))
+        .pipe(rename({ extname: '.css' }))
         .pipe(cssnano())
-        .pipe(gulp.dest(`${config.outputPath}css`))
+        .pipe(gulp.dest(`${config.outputPath}css/`))
 });
 
 /***
@@ -136,10 +130,9 @@ gulp.task('pug', () => {
         }))
         .on('error', function(err) {
             notify({
-                title:    "Pug",
-                subtitle: "What've you done now?!",
-                message:  err,
-                sound:    "Beep"
+                title: "Pug",
+                message: err,
+                sound: "Beep"
             }).write(err);
             this.emit('end');
         })
@@ -191,7 +184,7 @@ gulp.task('svg-sprite', () => {
             path.dirname = './'
             path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder
             path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols'
-            path.extname = (path.extname === '.svg') ? '.svg' : '.scss'
+            path.extname = (path.extname === '.svg') ? '.svg' : '.css'
         }))
         .pipe(gulp.dest(config.assetsPath));
 });
@@ -241,7 +234,7 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
     gulp.watch(`${config.outputPath}${config.staticTemplatesFolder}/*.html`).on('change', reload);
 
     // watch css
-    gulp.watch(`${config.assetsPath}${config.cssFolder}/**/*.sass`, ['css-dev']);
+    gulp.watch(`${config.assetsPath}${config.cssFolder}/**/*.sss`, ['css-dev']);
 
     // prettify html templates from pug
     // gulp.watch(`${config.assetsPath}${config.staticTemplatesFolder}/*.html`, ['prettify']);

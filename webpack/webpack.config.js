@@ -10,23 +10,19 @@ module.exports = {
         path.join(constants.SRC_DIR, 'js/main.js')
     ],
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loaders: ['babel-loader','webpack-module-hot-accept']
-            },
-            { test: /\.json$/, loader: 'json' }
+                use: ['babel-loader','webpack-module-hot-accept']
+            }
         ]
     },
     output: {
         filename: 'main.js',
         path: path.join(constants.DIST_DIR, 'js')
     },
-    plugins: (function() {
-        var plugins = [
-            new webpack.HotModuleReplacementPlugin()
-        ];
-        return plugins;
-    })(),
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
 };

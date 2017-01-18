@@ -2,60 +2,61 @@
   Mixins + functions
   ==========================================================================*/
 
+// info https://github.com/jonathantneal/precss
+
 // Media query
 // -------------------------
-=bp($size)
-    @media only print, only screen and (min-width: $size)
-        @content
+@define-mixin bp $size
+    @media only print, only screen and (min-width: $(size))
+        @mixin-content
 
-=bpmax($size)
-    @media only print, only screen and (max-width: $size)
-        @content
+@define-mixin bpmax $size
+    @media only print, only screen and (max-width: $(size))
+        @mixin-content        
 
-=print()
+@define-mixin print
     @media only print
-        @content
+        @mixin-content        
 
 // Sizing shortcuts
 // -------------------------
-=size($width, $height)
-    width: #{$width}px
-    height: #{$height}px
+@define-mixin size $width,$height
+    width: $(width)px
+    height: $(height)px
 
-=square($size)
-    +size($size, $size)
+@define-mixin square $size
+    @mixin size $(size),$(size)
 
 // Font family
 // -------------------------
-=ff($name)
+@define-mixin ff $name
     font-family: $name, Arial, sans-serif
 
 // Font size
 // -------------------------
 $base-font-size: 16
-
-=fz($fontValue)
-    $rem: ($fontValue / $base-font-size)
-    font-size: #{$fontValue}px
-    font-size: #{$rem}rem
+@define-mixin fz $fontValue
+    $rem: calc($fontValue / $base-font-size)
+    font-size: $(fontValue)px
+    font-size: $(rem)rem
 
 // List horizontal
 // -------------------------
-=lh()
+@define-mixin lh
     li
         display: inline-block
         list-style-type: none
 
 // Hide text
 // -------------------------
-=ht()
+@define-mixin ht
     text-indent: 100%
     white-space: nowrap
     overflow: hidden
 
 // Clearfix
 // -------------------------
-=cf
+@define-mixin cf
     &:after
         content: ""
         display: table

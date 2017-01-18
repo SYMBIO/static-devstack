@@ -3,7 +3,7 @@
   ==========================================================================*/
 
 :root
-  --mainColor: green
+    --mainColor: green
 
 @custom-media --only-medium-screen (width >= 500px) and (width <= 1200px)
 
@@ -14,8 +14,8 @@
     margin: 0
     padding: 0
 
-@-ms-viewport
-    width: device-width
+@-ms-viewport 
+    width: device-width 
 
 html
     font-size: 100%
@@ -28,12 +28,12 @@ body
     align-items: center
     flex-direction: column
     height: 100vh
-    @media (--only-medium-screen)
-        background-color: var(--mainColor)
+    @mixin retina-min 350px
+        background-color: red
 
 .social
     position: absolute
-    bottom: 15px
+    bottom: 15px 
     right: 15px
     i
         display: inline-block
@@ -41,11 +41,11 @@ body
 
 /* png sprite + postcss-assets usage */
 .fb
-    width: width($imgPath + 'png/icon-fb.png')
-    height: height($imgPath + 'png/icon-fb.png')
-    background-image: url($imgPath + 'png/icon-fb.png')
+    width: width('icon-fb.png')
+    height: height('icon-fb.png')
+    background-image: resolve('icon-fb.png')
 
 .tw
-    width: width($imgPath + 'png/icon-tw.png')
-    height: height($imgPath + 'png/icon-tw.png')
-    background-image: url($imgPath + 'png/icon-tw.png')
+    width: width('icon-tw.png')
+    height: height('icon-tw.png')
+    background-image: resolve('icon-tw.png')
