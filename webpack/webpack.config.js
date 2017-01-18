@@ -25,7 +25,7 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
-            'PRODUCTION': JSON.stringify(false),
+            'PRODUCTION': false,
             'process.env.NODE_ENV': JSON.stringify('development')
         }),        
     ]

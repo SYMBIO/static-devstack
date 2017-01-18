@@ -19,7 +19,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'PRODUCTION': JSON.stringify(true),
+            'PRODUCTION': true,
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
         new webpack.optimize.UglifyJsPlugin({
@@ -29,6 +29,3 @@ module.exports = {
         })
     ]
 };
-
-
-
