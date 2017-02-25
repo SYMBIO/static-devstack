@@ -2,16 +2,11 @@
   Base
   ==========================================================================*/
 
-:root
-    --mainColor: green
-
-@custom-media --only-medium-screen (width >= 500px) and (width <= 1200px)
-
 * , *:before , *:after
     box-sizing: border-box
 
 *
-    margin: 0
+    margin: 0 
     padding: 0
 
 @-ms-viewport 
@@ -28,9 +23,13 @@ body
     align-items: center
     flex-direction: column
     height: 100vh
-    @mixin retina-min 350px
-        background-color: red
-    color: rgba($black, .85) // postcss-hexrgba() plugin
+
+
+/* EXAMPLE code - DELETE */
+:root
+    --mainColor: green
+
+@custom-media --only-medium-screen (width >= 500px) and (width <= 1200px)
 
 .social
     position: absolute
@@ -40,7 +39,6 @@ body
         display: inline-block
         margin: 0 2px
 
-/* png sprite + postcss-assets usage */
 .fb
     width: width('icon-fb.png')
     height: height('icon-fb.png')

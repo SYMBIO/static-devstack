@@ -14,7 +14,6 @@ import runSequence       from 'run-sequence';
 import gutil             from 'gulp-util';
 import prettify          from 'gulp-html-prettify';
 import webp              from 'gulp-webp';
-import parker            from 'gulp-parker';
 import notify            from 'gulp-notify';
 
 /* postcss plugins */
@@ -64,7 +63,7 @@ const postCSSplugins = [
     easyImport(),
     precss(),
     hexrgba(),
-    cssnext({ browsers: ['last 2 versions', 'iOS 7', 'ie 10-11', 'Safari 8'] }),
+    cssnext({ browsers: ['last 2 versions', 'iOS 9', 'ie 11', 'Safari 9'] }),
     cssassets({
         cachebuster: true,
         loadPaths: [
@@ -84,7 +83,7 @@ const postCSSplugins = [
             }
             return Promise.resolve();
         }
-    }),
+    })
 ];
 
 /***
@@ -238,9 +237,6 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
     // watch css
     gulp.watch(`${config.assetsPath}${config.cssFolder}/**/*.sss`, ['css-dev']);
 
-    // prettify html templates from pug
-    // gulp.watch(`${config.assetsPath}${config.staticTemplatesFolder}/*.html`, ['prettify']);
-
     // watch images except sprites folders
     gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
               `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
@@ -292,6 +288,6 @@ gulp.task('build', ['pug','webpack-prod','css-prod','images'], () => {
 * CSS ANALYSIS TOOL - PARKER
 */
 gulp.task('stats', function() {
-    return gulp.src(`${config.outputPath}css/style.css`)
+    return gulp.src(`${config.outputPath}css/` + 'style.css')
         .pipe(parker());
 });

@@ -1,7 +1,7 @@
 # SYMBIO static-devstack
 
 ### Version
-1.0.0
+1.1.0
 
 ### Description
 Frontend static devstack including:
