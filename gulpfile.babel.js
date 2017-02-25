@@ -28,6 +28,7 @@ import easyImport        from 'postcss-easy-import';
 import calc              from 'postcss-math';
 import sprites           from 'postcss-sprites';
 
+const hexrgba              = require('postcss-hexrgba');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const browserSync = require('browser-sync').create();
@@ -62,6 +63,7 @@ gulp.task('browser-sync', () => {
 const postCSSplugins = [
     easyImport(),
     precss(),
+    hexrgba(),
     cssnext({ browsers: ['last 2 versions', 'iOS 7', 'ie 10-11', 'Safari 8'] }),
     cssassets({
         cachebuster: true,
