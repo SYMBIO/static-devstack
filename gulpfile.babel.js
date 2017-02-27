@@ -59,11 +59,13 @@ gulp.task('browser-sync', () => {
 });
 
 /* postcss plugins */
+const supportedBrowsers = ['last 2 versions', 'ie 10', 'Safari 8'];
+
 const postCSSplugins = [
     easyImport(),
     precss(),
     hexrgba(),
-    cssnext({ browsers: ['last 2 versions', 'iOS 9', 'ie 11', 'Safari 9'] }),
+    cssnext({ browsers: supportedBrowsers }),
     cssassets({
         cachebuster: true,
         loadPaths: [
@@ -114,7 +116,7 @@ gulp.task('css-prod', () => {
     return gulp.src(`${config.assetsPath}css/style.sss`)
         .pipe(postcss( postCSSplugins, {parser: sugarss} ))
         .pipe(rename({ extname: '.css' }))
-        .pipe(cssnano())
+        .pipe(cssnano({autoprefixer: { browsers: supportedBrowsers }}))        
         .pipe(gulp.dest(`${config.outputPath}css/`))
 });
 
