@@ -15,6 +15,7 @@ import gutil             from 'gulp-util';
 import prettify          from 'gulp-html-prettify';
 import webp              from 'gulp-webp';
 import notify            from 'gulp-notify';
+import eslint            from 'gulp-eslint';
 
 /* postcss plugins */
 import postcss           from 'gulp-postcss';
@@ -24,10 +25,10 @@ import cssnano           from 'gulp-cssnano';
 import precss            from 'precss';
 import sugarss           from 'sugarss';
 import easyImport        from 'postcss-easy-import';
-import calc              from 'postcss-math';
 import sprites           from 'postcss-sprites';
+import discardEmpty      from 'postcss-discard-empty';
 
-const hexrgba              = require('postcss-hexrgba');
+const hexrgba = require('postcss-hexrgba');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const browserSync = require('browser-sync').create();
@@ -85,21 +86,22 @@ const postCSSplugins = [
             }
             return Promise.resolve();
         }
-    })
+    }),
+    discardEmpty()
 ];
 
-/***
+/**
 * CSS-dev
 */
 gulp.task('css-dev', () => {
     return gulp.src(`${config.assetsPath}css/style.sss`)
         .pipe(sourcemaps.init())
-        .pipe(postcss( postCSSplugins, {parser: sugarss} ))
+        .pipe(postcss(postCSSplugins, { parser: sugarss }))
         .on('error', function(err) {
             notify({
-                title: "css",
+                title: 'css',
                 message: err,
-                sound: "Beep"
+                sound: 'Beep'
             }).write(err);
             this.emit('end');
         })        
@@ -109,18 +111,18 @@ gulp.task('css-dev', () => {
         .pipe(browserSync.stream());
 });
 
-/***
+/**
 * CSS-prod
 */
 gulp.task('css-prod', () => {
     return gulp.src(`${config.assetsPath}css/style.sss`)
-        .pipe(postcss( postCSSplugins, {parser: sugarss} ))
+        .pipe(postcss(postCSSplugins, { parser: sugarss }))
         .pipe(rename({ extname: '.css' }))
-        .pipe(cssnano({autoprefixer: { browsers: supportedBrowsers }}))        
-        .pipe(gulp.dest(`${config.outputPath}css/`))
+        .pipe(cssnano({ autoprefixer: { browsers: supportedBrowsers } }))     
+        .pipe(gulp.dest(`${config.outputPath}css/`));
 });
 
-/***
+/**
 * Pug
 */
 gulp.task('pug', () => {
@@ -133,9 +135,9 @@ gulp.task('pug', () => {
         }))
         .on('error', function(err) {
             notify({
-                title: "Pug",
+                title: 'Pug',
                 message: err,
-                sound: "Beep"
+                sound: 'Beep'
             }).write(err);
             this.emit('end');
         })
@@ -143,19 +145,19 @@ gulp.task('pug', () => {
         .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
 });
 
-/***
+/**
 * Adjust indentation
 */
 gulp.task('prettify', function() {
     gulp.src(`${config.assetsPath}${config.staticTemplatesFolder}/*.html`)
-        .pipe(prettify({indent_char: ' ', indent_size: 4}))
-        .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`))
+        .pipe(prettify({ indent_char: ' ', indent_size: 4 }))
+        .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
 });
 
-/***
+/**
 *  Images
 */
-gulp.task('images', ['cleanup','svg-sprite'], () => {
+gulp.task('images', ['cleanup', 'svg-sprite'], () => {
     return gulp.src([`${config.assetsPath}${config.imageFolder}/**/*`,
                     `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
                     `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
@@ -164,23 +166,23 @@ gulp.task('images', ['cleanup','svg-sprite'], () => {
         .pipe(image([
             image.svgo({
                 plugins: [
-                    {removeUselessDefs: false},
-                    {cleanupIDs: false},
-                    {removeViewBox:false},
-                    {removeUselessStrokeAndFill:false}
+                    { removeUselessDefs: false },
+                    { cleanupIDs: false },
+                    { removeViewBox: false },
+                    { removeUselessStrokeAndFill: false }
                 ]
             })
         ]))
         .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}`));
 });
 
-/***
+/**
 * SVG - sprite
 */
 gulp.task('svg-sprite', () => {
-  return gulp.src(`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*.svg`)
+    return gulp.src(`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*.svg`)
         .pipe(svgSymbols({
-            className:  '.icon--%f',
+            className: '.icon--%f',
             title: false
         }))
         .pipe(rename((path) => {
@@ -192,20 +194,29 @@ gulp.task('svg-sprite', () => {
         .pipe(gulp.dest(config.assetsPath));
 });
 
-/***
+/**
 * Webp - image format
 */
-gulp.task('webp', function () {
+gulp.task('webp', function() {
     return gulp.src(`${config.outputPath}${config.imageFolder}/jpg/**/*.jpg`)
         .pipe(webp())
         .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}/webp/`));
 });
 
-/***
+/**
+* ESlint
+*/
+gulp.task('eslint', () => {
+    return gulp.src([`${config.assetsPath}/js/**/*.js`, '!node_modules/**', `!${config.assetsPath}/js/helpers.js`])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+/**
 * Webpack - production
 */
 gulp.task('webpack-prod', function() {
-
     webpack(webpackConfigProd, function(err, stats) {
         if (err) {
             throw new gutil.PluginError('webpack:build', err);
@@ -214,21 +225,24 @@ gulp.task('webpack-prod', function() {
             colors: true,
             noInfo: true
         }));
-    })
+    });
 });
 
-/***
+/**
 * Cleanup images
 */
 gulp.task('cleanup', () => {
     return del([`${config.outputPath}${config.imageFolder}`]);
 });
 
-/***
+/**
 * DEVELOPMENT
 */
-gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
+gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'eslint'], () => {
     // runSequence(['webp']);
+
+    // watch js
+    gulp.watch(`${config.assetsPath}js/**/*.js`, ['eslint']);
 
     // watch pug
     gulp.watch(`${config.assetsPath}pug/**/*.pug`, ['pug']);
@@ -247,19 +261,18 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
               `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`,
               `!${config.assetsPath}${config.imageFolder}/sprite.svg`])
         .on('change', (file) => {
-            if(file.type !== 'deleted') {
+            if (file.type !== 'deleted') {
                 var sourceFolder = config.assetsPath + config.imageFolder,
                     folderIndex = file.path.indexOf(sourceFolder) + sourceFolder.length + 1,
                     subFolders = file.path.substr(folderIndex).split('/'),
                     outputFolder = config.outputPath + config.imageFolder;
 
-                if(subFolders.length > 1){
-
-                    var fileOffsetLen = subFolders.length - 1;
-                    if(subFolders[fileOffsetLen] == '') {
+                if (subFolders.length > 1) {
+                    let fileOffsetLen = subFolders.length - 1;
+                    if (subFolders[fileOffsetLen] === '') {
                         fileOffsetLen = subFolders.length - 2;
                     }
-                    for(var s = 0; s < fileOffsetLen; s++){
+                    for (let s = 0; s < fileOffsetLen; s++) {
                         outputFolder += '/' + subFolders[s];
                     }
                 }
@@ -278,18 +291,18 @@ gulp.task('default', ['pug','css-dev','images','browser-sync'], () => {
     });
 });
 
-/***
+/**
 * PRODUCTION
 */
-gulp.task('build', ['pug','webpack-prod','css-prod','images'], () => {
+gulp.task('build', ['pug', 'webpack-prod', 'css-prod', 'images'], () => {
     runSequence(['prettify']);
     // runSequence(['webp','prettify']);
 });
 
-/***
+/**
 * CSS ANALYSIS TOOL - PARKER
 */
-gulp.task('stats', function() {
-    return gulp.src(`${config.outputPath}css/` + 'style.css')
-        .pipe(parker());
-});
+// gulp.task('stats', function() {
+//     return gulp.src(`${config.outputPath}css/` + 'style.css')
+//         .pipe(parker());
+// });

@@ -3,7 +3,10 @@ import path              from 'path';
 import constants         from './constants';
 
 module.exports = {
-    entry: path.join(constants.SRC_DIR, 'js/main.js'),
+    entry: [
+        'babel-polyfill',
+        path.join(constants.SRC_DIR, 'js/main.js')        
+    ],
     module: {
         rules: [
             {
