@@ -1,4 +1,4 @@
-module.exports = (function () {
+module.exports = (function() {
     /**
      * Globally available console.log
      * that won't print anything in production.

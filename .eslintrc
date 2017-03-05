@@ -3,7 +3,10 @@
     "ecmaVersion": 8,
     "sourceType": "module"
   },
-  "env": { "es6": true },  
+  "env": {
+    "browser": true,
+    "es6": true
+  },
   "globals": {
     "cl": true,
     "PRODUCTION": true,
@@ -16,7 +19,8 @@
         "named": "never",
         "asyncArrow": "ignore"
     }],
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "wrap-iife": [2, "inside"] 
   },
   "extends": "airbnb-base/legacy"
 }

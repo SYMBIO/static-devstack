@@ -1,11 +1,11 @@
-import webpack           from 'webpack';
-import path              from 'path';
-import constants         from './constants';
+import webpack from 'webpack';
+import path from 'path';
+import constants from './constants';
 
 module.exports = {
     entry: [
         'babel-polyfill',
-        path.join(constants.SRC_DIR, 'js/main.js')        
+        path.join(constants.SRC_DIR, 'js/main.js')
     ],
     module: {
         rules: [
@@ -22,7 +22,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'PRODUCTION': true,
+            PRODUCTION: true,
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
         new webpack.optimize.UglifyJsPlugin({

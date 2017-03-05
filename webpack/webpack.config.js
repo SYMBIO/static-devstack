@@ -1,13 +1,13 @@
-import webpack           from 'webpack';
-import path              from 'path';
-import constants         from './constants';
+import webpack from 'webpack';
+import path from 'path';
+import constants from './constants';
 
 module.exports = {
-    devtool: "source-map",
+    devtool: 'source-map',
     entry: [
         'webpack/hot/dev-server',
         'webpack-hot-middleware/client',
-        'babel-polyfill',        
+        'babel-polyfill',
         path.join(constants.SRC_DIR, 'js/main.js')
     ],
     module: {
@@ -15,7 +15,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: ['babel-loader','webpack-module-hot-accept']
+                use: ['babel-loader', 'webpack-module-hot-accept']
             }
         ]
     },
@@ -26,8 +26,8 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
-            'PRODUCTION': false,
+            PRODUCTION: false,
             'process.env.NODE_ENV': JSON.stringify('development')
-        }),        
+        })
     ]
 };
