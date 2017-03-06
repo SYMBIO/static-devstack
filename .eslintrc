@@ -20,7 +20,8 @@
         "asyncArrow": "ignore"
     }],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "wrap-iife": [2, "inside"] 
+    "wrap-iife": [2, "inside"],
+    "no-shadow": [0]    
   },
   "extends": "airbnb-base/legacy"
 }
