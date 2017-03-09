@@ -5,7 +5,6 @@ import constants from './constants';
 module.exports = {
     devtool: 'source-map',
     entry: [
-        'webpack/hot/dev-server',
         'webpack-hot-middleware/client',
         'babel-polyfill',
         path.join(constants.SRC_DIR, 'js/main.js')
