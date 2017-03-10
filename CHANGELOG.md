@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.2.0] - 2017-03-04
 ### Added
-- eslint + airbnb config
+- eslint
 - babel polyfill -> polyfill Promises
 - babel env preset -> Default behavior without options is the same as babel-preset-latest
 
