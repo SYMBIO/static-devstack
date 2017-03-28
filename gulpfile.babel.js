@@ -28,6 +28,7 @@ import easyImport        from 'postcss-easy-import';
 import sprites           from 'postcss-sprites';
 import discardEmpty      from 'postcss-discard-empty';
 import colorFunction     from 'postcss-color-function';
+import objectFit         from 'postcss-object-fit-images';
 
 const hexrgba = require('postcss-hexrgba');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -68,6 +69,7 @@ const postCSSplugins = [
     precss(),
     colorFunction(),
     hexrgba(),
+    objectFit(),
     cssnext({ browsers: supportedBrowsers }),
     cssassets({
         cachebuster: true,

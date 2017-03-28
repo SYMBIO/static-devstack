@@ -1,7 +1,7 @@
 # SYMBIO static-devstack
 
 ### Version
-1.2.0
+1.3.0
 
 ### Description
 Frontend static devstack including:
@@ -38,6 +38,7 @@ PostCSS plugins reference:
 * [postcss-sprites](https://github.com/2createStudio/postcss-sprites) PostCSS plugin that generates spritesheets from your stylesheets.
 * [postcss-calc](https://github.com/postcss/postcss-calc) This plugin reduce calc() references whenever it's possible.
 * [cssnano](http://cssnano.co/) A modular minifier, built on top of the PostCSS ecosystem.
+* [postcss-color-function](https://github.com/postcss/postcss-color-function) PostCSS plugin to transform W3C CSS color function to more compatible CSS
 
 **postcss-sprites** -
 sprite is generated only from .png files , if you don't want a particular file to be included in sprite (file size) , move it to the 'png-src' folder.

@@ -4,13 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.0] - 2017-03-28
+### Added
+- object-fit-images -> polyfill object-fit
+- postcss-color-function
+
 ## [1.2.0] - 2017-03-04
 ### Added
 - eslint
 - babel polyfill -> polyfill Promises
 - babel env preset -> Default behavior without options is the same as babel-preset-latest
-
-### Changed
 
 ### Removed
 - latest preset
