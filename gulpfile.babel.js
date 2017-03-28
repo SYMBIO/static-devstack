@@ -27,6 +27,7 @@ import sugarss           from 'sugarss';
 import easyImport        from 'postcss-easy-import';
 import sprites           from 'postcss-sprites';
 import discardEmpty      from 'postcss-discard-empty';
+import colorFunction     from 'postcss-color-function';
 
 const hexrgba = require('postcss-hexrgba');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -65,6 +66,7 @@ const supportedBrowsers = ['last 2 versions', 'ie 10', 'Safari 8'];
 const postCSSplugins = [
     easyImport(),
     precss(),
+    colorFunction(),
     hexrgba(),
     cssnext({ browsers: supportedBrowsers }),
     cssassets({
@@ -104,7 +106,7 @@ gulp.task('css-dev', () => {
                 sound: 'Beep'
             }).write(err);
             this.emit('end');
-        })        
+        })
         .pipe(sourcemaps.write())
         .pipe(rename({ extname: '.css' }))
         .pipe(gulp.dest(`${config.outputPath}css/`))
@@ -186,10 +188,10 @@ gulp.task('svg-sprite', () => {
             title: false
         }))
         .pipe(rename((path) => {
-            path.dirname = './'
-            path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder
-            path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols'
-            path.extname = (path.extname === '.svg') ? '.svg' : '.css'
+            path.dirname = './';
+            path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder;
+            path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols';
+            path.extname = (path.extname === '.svg') ? '.svg' : '.css';
         }))
         .pipe(gulp.dest(config.assetsPath));
 });
