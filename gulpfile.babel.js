@@ -27,6 +27,7 @@ import sugarss           from 'sugarss';
 import easyImport        from 'postcss-easy-import';
 import sprites           from 'postcss-sprites';
 import discardEmpty      from 'postcss-discard-empty';
+import objectFit         from 'postcss-object-fit-images';
 
 const hexrgba = require('postcss-hexrgba');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -66,6 +67,7 @@ const postCSSplugins = [
     easyImport(),
     precss(),
     hexrgba(),
+    objectFit(),
     cssnext({ browsers: supportedBrowsers }),
     cssassets({
         cachebuster: true,
