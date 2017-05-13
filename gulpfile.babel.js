@@ -16,16 +16,17 @@ import prettify          from 'gulp-html-prettify';
 import webp              from 'gulp-webp';
 import notify            from 'gulp-notify';
 import eslint            from 'gulp-eslint';
+import flow              from 'gulp-flowtype';
 
 /* postcss plugins */
 import postcss           from 'gulp-postcss';
 import cssnext           from 'postcss-cssnext';
+import csscalc           from 'postcss-calc';
 import cssassets         from 'postcss-assets';
 import cssnano           from 'gulp-cssnano';
 import precss            from 'precss';
 import sugarss           from 'sugarss';
 import easyImport        from 'postcss-easy-import';
-import sprites           from 'postcss-sprites';
 import discardEmpty      from 'postcss-discard-empty';
 import colorFunction     from 'postcss-color-function';
 import objectFit         from 'postcss-object-fit-images';
@@ -62,34 +63,25 @@ gulp.task('browser-sync', () => {
 });
 
 /* postcss plugins */
-const supportedBrowsers = ['last 2 versions', 'ie 10', 'Safari 8'];
+const supportedBrowsers = ['last 2 versions', 'ie 11', 'Safari 8'];
 
 const postCSSplugins = [
     easyImport(),
     precss(),
+    csscalc(),
     colorFunction(),
     hexrgba(),
     objectFit(),
     cssnext({ browsers: supportedBrowsers }),
     cssassets({
         cachebuster: true,
+        relative: true,
         loadPaths: [
             `./${config.assetsPath}${config.imageFolder}/png/`,
             `./${config.assetsPath}${config.imageFolder}/png-src/`,
             `./${config.assetsPath}${config.imageFolder}/jpg/`,
             `./${config.assetsPath}${config.imageFolder}/svg/`
         ]
-    }),
-    sprites({
-        stylesheetPath: `${config.outputPath}${config.cssFolder}`,
-        spritePath: `${config.outputPath}${config.imageFolder}`,
-        filterBy: function(image) {
-            // Allow png files only
-            if (!/\.png$/.test(image.url) || image.path.indexOf('png-src') !== -1) {
-                return Promise.reject();
-            }
-            return Promise.resolve();
-        }
     }),
     discardEmpty()
 ];
@@ -122,7 +114,7 @@ gulp.task('css-prod', () => {
     return gulp.src(`${config.assetsPath}css/style.sss`)
         .pipe(postcss(postCSSplugins, { parser: sugarss }))
         .pipe(rename({ extname: '.css' }))
-        .pipe(cssnano({ autoprefixer: { browsers: supportedBrowsers } }))     
+        .pipe(cssnano({ autoprefixer: { browsers: supportedBrowsers } }))
         .pipe(gulp.dest(`${config.outputPath}css/`));
 });
 
@@ -189,7 +181,7 @@ gulp.task('svg-sprite', () => {
             className: '.icon--%f',
             title: false
         }))
-        .pipe(rename((path) => {
+        .pipe(rename(path => {
             path.dirname = './';
             path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder;
             path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols';
@@ -208,13 +200,19 @@ gulp.task('webp', function() {
 });
 
 /**
-* ESlint
+* Static analysis => flow + ESlint
 */
-gulp.task('eslint', () => {
-    return gulp.src([`${config.assetsPath}/js/**/*.js`, '!node_modules/**', `!${config.assetsPath}/js/helpers.js`])
+gulp.task('flow-eslint', () => {
+    return gulp.src([`${config.assetsPath}/js/**/*.js`, '!node_modules/**'])
         .pipe(eslint())
         .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe(flow({
+            all: false,
+            weak: false,
+            killFlow: false,
+            beep: true,
+            abort: false
+        }));
 });
 
 /**
@@ -242,11 +240,10 @@ gulp.task('cleanup', () => {
 /**
 * DEVELOPMENT
 */
-gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'eslint'], () => {
-    // runSequence(['webp']);
+gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'flow-eslint'], () => {
 
     // watch js
-    gulp.watch(`${config.assetsPath}js/**/*.js`, ['eslint']);
+    gulp.watch(`${config.assetsPath}js/**/*.js`, ['flow-eslint']);
 
     // watch pug
     gulp.watch(`${config.assetsPath}pug/**/*.pug`, ['pug']);
@@ -298,15 +295,6 @@ gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'eslint'], () 
 /**
 * PRODUCTION
 */
-gulp.task('build', ['pug', 'webpack-prod', 'css-prod', 'images'], () => {
+gulp.task('build', ['pug', 'webpack-prod', 'css-prod', 'images', 'flow-eslint'], () => {
     runSequence(['prettify']);
-    // runSequence(['webp','prettify']);
 });
-
-/**
-* CSS ANALYSIS TOOL - PARKER
-*/
-// gulp.task('stats', function() {
-//     return gulp.src(`${config.outputPath}css/` + 'style.css')
-//         .pipe(parker());
-// });

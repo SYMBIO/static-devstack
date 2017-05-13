@@ -14,7 +14,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: ['babel-loader', 'webpack-module-hot-accept']
+                use: ['babel-loader']
             }
         ]
     },

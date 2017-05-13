@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import path from 'path';
 import constants from './constants';
+import BabiliPlugin from 'babili-webpack-plugin';
 
 module.exports = {
     entry: [
@@ -25,10 +26,6 @@ module.exports = {
             PRODUCTION: true,
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
+        new BabiliPlugin()
     ]
 };

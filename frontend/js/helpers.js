@@ -1,3 +1,4 @@
+/*eslint-disable */
 module.exports = (function() {
     /**
      * Globally available console.log
