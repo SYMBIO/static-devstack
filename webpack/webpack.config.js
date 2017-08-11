@@ -1,13 +1,13 @@
 import webpack from 'webpack';
 import path from 'path';
-import constants from './constants';
+import { SRC, DIST } from './constants';
 
 module.exports = {
     devtool: 'source-map',
     entry: [
         'webpack-hot-middleware/client',
         'babel-polyfill',
-        path.join(constants.SRC_DIR, 'js/main.js')
+        path.join(SRC, 'js/main.js')
     ],
     module: {
         rules: [
@@ -20,7 +20,7 @@ module.exports = {
     },
     output: {
         filename: 'main.js',
-        path: path.join(constants.DIST_DIR, 'js')
+        path: path.join(DIST, 'js')
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

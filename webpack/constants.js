@@ -7,11 +7,11 @@ const constants = Object.freeze({
     ABSOLUTE_BASE,
     DIST_DIR: path.join(ABSOLUTE_BASE, `${config.outputPath}`),
     SRC_DIR: path.join(ABSOLUTE_BASE, `${config.assetsPath}`),
-    PORT: `${config.localPort}`
+    PORT: `${config.port}`
 });
 
-export const DIST_DIR = constants.DIST_DIR;
-export const SRC_DIR = constants.SRC_DIR;
+export const DIST = constants.DIST_DIR;
+export const SRC = constants.SRC_DIR;
 export const PORT = constants.PORT;
 
 export default constants;

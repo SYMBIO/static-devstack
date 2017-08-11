@@ -1,5 +1,14 @@
+import {
+    port,
+    assetsPath,
+    outputPath,
+    staticTemplatesFolder,
+    imageFolder,
+    spritesFolder,
+    svgFolder,
+    cssFolder
+} from './config';
 import gulp              from 'gulp';
-import config            from './config';
 import sourcemaps        from 'gulp-sourcemaps';
 import webpackConfigDev  from './webpack/webpack.config';
 import webpackConfigProd from './webpack/webpack.config.prod';
@@ -40,10 +49,11 @@ const bundler = webpack(webpackConfigDev);
 
 gulp.task('browser-sync', () => {
     browserSync.init({
-        port: config.localPort,
+        port: port,
+        open: false,
         server: {
-            baseDir: `./${config.outputPath}`,
-            index: `${config.staticTemplatesFolder}/index.html`,
+            baseDir: `./${outputPath}`,
+            index: `${staticTemplatesFolder}/index.html`,
 
             middleware: [
                 webpackDevMiddleware(bundler, {
@@ -63,7 +73,7 @@ gulp.task('browser-sync', () => {
 });
 
 /* postcss plugins */
-const supportedBrowsers = ['last 2 versions', 'ie 11', 'Safari 8'];
+const supportedBrowsers = ['last 2 versions', 'not ie <= 10', 'Safari 8'];
 
 const postCSSplugins = [
     easyImport(),
@@ -77,10 +87,10 @@ const postCSSplugins = [
         cachebuster: true,
         relative: true,
         loadPaths: [
-            `./${config.assetsPath}${config.imageFolder}/png/`,
-            `./${config.assetsPath}${config.imageFolder}/png-src/`,
-            `./${config.assetsPath}${config.imageFolder}/jpg/`,
-            `./${config.assetsPath}${config.imageFolder}/svg/`
+            `./${assetsPath}${imageFolder}/png/`,
+            `./${assetsPath}${imageFolder}/png-src/`,
+            `./${assetsPath}${imageFolder}/jpg/`,
+            `./${assetsPath}${imageFolder}/svg/`
         ]
     }),
     discardEmpty()
@@ -90,7 +100,7 @@ const postCSSplugins = [
 * CSS-dev
 */
 gulp.task('css-dev', () => {
-    return gulp.src(`${config.assetsPath}css/style.sss`)
+    return gulp.src(`${assetsPath}css/style.sss`)
         .pipe(sourcemaps.init())
         .pipe(postcss(postCSSplugins, { parser: sugarss }))
         .on('error', function(err) {
@@ -103,7 +113,7 @@ gulp.task('css-dev', () => {
         })
         .pipe(sourcemaps.write())
         .pipe(rename({ extname: '.css' }))
-        .pipe(gulp.dest(`${config.outputPath}css/`))
+        .pipe(gulp.dest(`${outputPath}css/`))
         .pipe(browserSync.stream());
 });
 
@@ -111,11 +121,11 @@ gulp.task('css-dev', () => {
 * CSS-prod
 */
 gulp.task('css-prod', () => {
-    return gulp.src(`${config.assetsPath}css/style.sss`)
+    return gulp.src(`${assetsPath}css/style.sss`)
         .pipe(postcss(postCSSplugins, { parser: sugarss }))
         .pipe(rename({ extname: '.css' }))
         .pipe(cssnano({ autoprefixer: { browsers: supportedBrowsers } }))
-        .pipe(gulp.dest(`${config.outputPath}css/`));
+        .pipe(gulp.dest(`${outputPath}css/`));
 });
 
 /**
@@ -123,7 +133,7 @@ gulp.task('css-prod', () => {
 */
 gulp.task('pug', () => {
     var YOUR_LOCALS = {};
-    gulp.src([`${config.assetsPath}pug/*.pug`, '!' + `${config.assetsPath}pug/layout.pug`])
+    gulp.src([`${assetsPath}pug/*.pug`, '!' + `${assetsPath}pug/layout.pug`])
         .pipe(plumber())
         .pipe(pug({
             locals: YOUR_LOCALS,
@@ -137,28 +147,28 @@ gulp.task('pug', () => {
             }).write(err);
             this.emit('end');
         })
-        .pipe(gulp.dest(`${config.assetsPath}${config.staticTemplatesFolder}`))
-        .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
+        .pipe(gulp.dest(`${assetsPath}${staticTemplatesFolder}`))
+        .pipe(gulp.dest(`${outputPath}${staticTemplatesFolder}`));
 });
 
 /**
 * Adjust indentation
 */
-gulp.task('prettify', function() {
-    gulp.src(`${config.assetsPath}${config.staticTemplatesFolder}/*.html`)
+gulp.task('prettify', () => {
+    gulp.src(`${assetsPath}${staticTemplatesFolder}/*.html`)
         .pipe(prettify({ indent_char: ' ', indent_size: 4 }))
-        .pipe(gulp.dest(`${config.outputPath}${config.staticTemplatesFolder}`));
+        .pipe(gulp.dest(`${outputPath}${staticTemplatesFolder}`));
 });
 
 /**
 *  Images
 */
 gulp.task('images', ['cleanup', 'svg-sprite'], () => {
-    return gulp.src([`${config.assetsPath}${config.imageFolder}/**/*`,
-                    `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
-                    `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
-                    `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/`,
-                    `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`])
+    return gulp.src([`${assetsPath}${imageFolder}/**/*`,
+                    `!${assetsPath}${imageFolder}/${spritesFolder}/`,
+                    `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
+                    `!${assetsPath}${imageFolder}/${svgFolder}/`,
+                    `!${assetsPath}${imageFolder}/${svgFolder}/*`])
         .pipe(image([
             image.svgo({
                 plugins: [
@@ -169,41 +179,41 @@ gulp.task('images', ['cleanup', 'svg-sprite'], () => {
                 ]
             })
         ]))
-        .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}`));
+        .pipe(gulp.dest(`${outputPath}${imageFolder}`));
 });
 
 /**
 * SVG - sprite
 */
 gulp.task('svg-sprite', () => {
-    return gulp.src(`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*.svg`)
+    return gulp.src(`${assetsPath}${imageFolder}/${svgFolder}/*.svg`)
         .pipe(svgSymbols({
             className: '.icon--%f',
             title: false
         }))
         .pipe(rename(path => {
             path.dirname = './';
-            path.dirname += (path.extname === '.svg') ? config.imageFolder : config.cssFolder;
+            path.dirname += (path.extname === '.svg') ? imageFolder : cssFolder;
             path.basename = (path.extname === '.svg') ? 'sprite' : 'svg-symbols';
             path.extname = (path.extname === '.svg') ? '.svg' : '.css';
         }))
-        .pipe(gulp.dest(config.assetsPath));
+        .pipe(gulp.dest(assetsPath));
 });
 
 /**
 * Webp - image format
 */
-gulp.task('webp', function() {
-    return gulp.src(`${config.outputPath}${config.imageFolder}/jpg/**/*.jpg`)
+gulp.task('webp', () => {
+    return gulp.src(`${outputPath}${imageFolder}/jpg/**/*.jpg`)
         .pipe(webp())
-        .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}/webp/`));
+        .pipe(gulp.dest(`${outputPath}${imageFolder}/webp/`));
 });
 
 /**
 * Static analysis => flow + ESlint
 */
 gulp.task('flow-eslint', () => {
-    return gulp.src([`${config.assetsPath}/js/**/*.js`, '!node_modules/**'])
+    return gulp.src([`${assetsPath}/js/**/*.js`, '!node_modules/**'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(flow({
@@ -218,8 +228,8 @@ gulp.task('flow-eslint', () => {
 /**
 * Webpack - production
 */
-gulp.task('webpack-prod', function() {
-    webpack(webpackConfigProd, function(err, stats) {
+gulp.task('webpack-prod', () => {
+    webpack(webpackConfigProd, (err, stats) => {
         if (err) {
             throw new gutil.PluginError('webpack:build', err);
         }
@@ -234,7 +244,7 @@ gulp.task('webpack-prod', function() {
 * Cleanup images
 */
 gulp.task('cleanup', () => {
-    return del([`${config.outputPath}${config.imageFolder}`]);
+    return del([`${outputPath}${imageFolder}`]);
 });
 
 /**
@@ -243,30 +253,30 @@ gulp.task('cleanup', () => {
 gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'flow-eslint'], () => {
 
     // watch js
-    gulp.watch(`${config.assetsPath}js/**/*.js`, ['flow-eslint']);
+    gulp.watch(`${assetsPath}js/**/*.js`, ['flow-eslint']);
 
     // watch pug
-    gulp.watch(`${config.assetsPath}pug/**/*.pug`, ['pug']);
+    gulp.watch(`${assetsPath}pug/**/*.pug`, ['pug']);
 
     // watch html
-    gulp.watch(`${config.outputPath}${config.staticTemplatesFolder}/*.html`).on('change', reload);
+    gulp.watch(`${outputPath}${staticTemplatesFolder}/*.html`).on('change', reload);
 
     // watch css
-    gulp.watch(`${config.assetsPath}${config.cssFolder}/**/*.sss`, ['css-dev']);
+    gulp.watch(`${assetsPath}${cssFolder}/**/*.sss`, ['css-dev']);
 
     // watch images except sprites folders
-    gulp.watch([`${config.assetsPath}${config.imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
-              `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/`,
-              `!${config.assetsPath}${config.imageFolder}/${config.spritesFolder}/*`,
-              `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/`,
-              `!${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`,
-              `!${config.assetsPath}${config.imageFolder}/sprite.svg`])
+    gulp.watch([`${assetsPath}${imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
+              `!${assetsPath}${imageFolder}/${spritesFolder}/`,
+              `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
+              `!${assetsPath}${imageFolder}/${svgFolder}/`,
+              `!${assetsPath}${imageFolder}/${svgFolder}/*`,
+              `!${assetsPath}${imageFolder}/sprite.svg`])
         .on('change', (file) => {
             if (file.type !== 'deleted') {
-                var sourceFolder = config.assetsPath + config.imageFolder,
+                var sourceFolder = assetsPath + imageFolder,
                     folderIndex = file.path.indexOf(sourceFolder) + sourceFolder.length + 1,
                     subFolders = file.path.substr(folderIndex).split('/'),
-                    outputFolder = config.outputPath + config.imageFolder;
+                    outputFolder = outputPath + imageFolder;
 
                 if (subFolders.length > 1) {
                     let fileOffsetLen = subFolders.length - 1;
@@ -284,10 +294,10 @@ gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'flow-eslint']
         });
 
     // watch svg sprites
-    gulp.watch([`${config.assetsPath}${config.imageFolder}/${config.svgFolder}/*`]).on('change', () => {
+    gulp.watch([`${assetsPath}${imageFolder}/${svgFolder}/*`]).on('change', () => {
         runSequence(['svg-sprite'], function() {
-            gulp.src(`${config.assetsPath}${config.imageFolder}/sprite.svg`)
-                .pipe(gulp.dest(`${config.outputPath}${config.imageFolder}`));
+            gulp.src(`${assetsPath}${imageFolder}/sprite.svg`)
+                .pipe(gulp.dest(`${outputPath}${imageFolder}`));
         });
     });
 });

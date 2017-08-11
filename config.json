@@ -7,5 +7,5 @@
 	"cssFolder": "css",
 	"mainCssFiles": ["style"],
 	"mainJsFiles": ["main"],
-	"localPort": 8080
+	"port": 8080
 }

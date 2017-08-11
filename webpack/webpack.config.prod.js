@@ -1,12 +1,12 @@
 import webpack from 'webpack';
 import path from 'path';
-import constants from './constants';
+import { SRC, DIST } from './constants';
 import BabiliPlugin from 'babili-webpack-plugin';
 
 module.exports = {
     entry: [
         'babel-polyfill',
-        path.join(constants.SRC_DIR, 'js/main.js')
+        path.join(SRC, 'js/main.js')
     ],
     module: {
         rules: [
@@ -19,7 +19,7 @@ module.exports = {
     },
     output: {
         filename: 'js/main.js',
-        path: path.join(constants.DIST_DIR)
+        path: path.join(DIST)
     },
     plugins: [
         new webpack.DefinePlugin({
