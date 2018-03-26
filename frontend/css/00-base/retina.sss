@@ -2,16 +2,16 @@
   Retina media queries
   ==========================================================================*/
 
-@define-mixin retina
+@mixin retina
     @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
     only screen and (min-device-pixel-ratio: 1.5),
     only screen and (min-resolution: 192dpi),
     only screen and (min-resolution: 2dppx)
-        @mixin-content
+        @content
 
-@define-mixin retina-min $size
-    @media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (min-width: $(size)),
-    only screen and (min-device-pixel-ratio: 1.5) and (min-width: $(size)),
-    only screen and (min-resolution: 192dpi) and (min-width: $(size)),
-    only screen and (min-resolution: 2dppx) and (min-width: $(size))
-        @mixin-content    
+@mixin retina-min ($size)
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5) and (min-width: $size),
+    only screen and (min-device-pixel-ratio: 1.5) and (min-width: $size),
+    only screen and (min-resolution: 192dpi) and (min-width: $size),
+    only screen and (min-resolution: 2dppx) and (min-width: $size)
+        @content

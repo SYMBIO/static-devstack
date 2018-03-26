@@ -41,7 +41,5 @@
   "extends": [
     "eslint:recommended"
   ],
-  "plugins": [
-    "flowtype"
-  ]
+  "plugins": []
 }

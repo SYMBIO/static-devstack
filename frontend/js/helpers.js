@@ -5,5 +5,5 @@ module.exports = (function() {
      * that won't print anything in production.
      * Protip: blackbox this file in devtools
      */
-    window.cl = (...args) => (!PRODUCTION) ? console.log(...args) : false;
+    window.cl = (...args) => (!process.env.production) ? console.log(...args) : false;
 })();

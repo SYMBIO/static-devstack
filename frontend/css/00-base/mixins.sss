@@ -6,57 +6,61 @@
 
 // Media query
 // -------------------------
-@define-mixin bp $size
-    @media only print, only screen and (min-width: $(size))
-        @mixin-content
+@mixin bp($size)
+    @media only print, only screen and (min-width: $size)
+        @content
 
-@define-mixin bpmax $size
-    @media only print, only screen and (max-width: $(size))
-        @mixin-content        
+@mixin bpmax($size)
+    @media only print, only screen and (max-width: $size)
+        @content
 
-@define-mixin print
+@mixin print
     @media only print
-        @mixin-content        
+        @content
 
 // Sizing shortcuts
 // -------------------------
-@define-mixin size $width,$height
+@mixin size($width,$height)
     width: $(width)px
     height: $(height)px
 
-@define-mixin square $size
-    @mixin size $(size),$(size) 
+@mixin square($size)
+    @include size($size, $size)
 
 // Font family
 // -------------------------
-@define-mixin ff $name
+@mixin ff($name)
     font-family: $name, Arial, sans-serif
 
 // Font size
 // -------------------------
 $base-font-size: 16
-@define-mixin fz $fontValue
+@mixin fz($fontValue)
     $rem: calc($fontValue / $base-font-size)
-    font-size: $(fontValue)px
     font-size: $(rem)rem
 
 // List horizontal
 // -------------------------
-@define-mixin lh
+@mixin lh
     li
         display: inline-block
         list-style-type: none
 
 // Hide text
 // -------------------------
-@define-mixin ht
-    text-indent: 100%
-    white-space: nowrap
+@mixin ht
+    border: 0
+    clip: rect(0 0 0 0)
+    height: 1px
+    margin: -1px
     overflow: hidden
+    padding: 0
+    position: absolute
+    width: 1px
 
 // Clearfix
 // -------------------------
-@define-mixin cf
+@mixin cf
     &:after
         content: ""
         display: table

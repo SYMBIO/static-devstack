@@ -10,9 +10,6 @@ import {
 } from './config';
 import gulp              from 'gulp';
 import sourcemaps        from 'gulp-sourcemaps';
-import webpackConfigDev  from './webpack/webpack.config';
-import webpackConfigProd from './webpack/webpack.config.prod';
-import webpack           from 'webpack';
 import plumber           from 'gulp-plumber';
 import pug               from 'gulp-pug';
 import svgSymbols        from 'gulp-svg-symbols';
@@ -20,12 +17,10 @@ import rename            from 'gulp-rename';
 import image             from 'gulp-imagemin';
 import del               from 'del';
 import runSequence       from 'run-sequence';
-import gutil             from 'gulp-util';
 import prettify          from 'gulp-html-prettify';
 import webp              from 'gulp-webp';
 import notify            from 'gulp-notify';
 import eslint            from 'gulp-eslint';
-import flow              from 'gulp-flowtype';
 
 /* postcss plugins */
 import postcss           from 'gulp-postcss';
@@ -41,11 +36,8 @@ import colorFunction     from 'postcss-color-function';
 import objectFit         from 'postcss-object-fit-images';
 
 const hexrgba = require('postcss-hexrgba');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
-const bundler = webpack(webpackConfigDev);
 
 gulp.task('browser-sync', () => {
     browserSync.init({
@@ -53,21 +45,7 @@ gulp.task('browser-sync', () => {
         open: false,
         server: {
             baseDir: `./${outputPath}`,
-            index: `${staticTemplatesFolder}/index.html`,
-
-            middleware: [
-                webpackDevMiddleware(bundler, {
-                    publicPath: webpackConfigDev.output.publicPath,
-                    noInfo: true,
-                    inline: true,
-                    stats: {
-                        assets: false,
-                        colors: true,
-                        warnings: false
-                    }
-                }),
-                webpackHotMiddleware(bundler)
-            ]
+            index: `${staticTemplatesFolder}/index.html`
         }
     });
 });
@@ -132,7 +110,10 @@ gulp.task('css-prod', () => {
 * Pug
 */
 gulp.task('pug', () => {
-    var YOUR_LOCALS = {};
+    var YOUR_LOCALS = {
+        js_path: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/' : '/js/'
+    };
+
     gulp.src([`${assetsPath}pug/*.pug`, '!' + `${assetsPath}pug/layout.pug`])
         .pipe(plumber())
         .pipe(pug({
@@ -164,11 +145,13 @@ gulp.task('prettify', () => {
 *  Images
 */
 gulp.task('images', ['cleanup', 'svg-sprite'], () => {
-    return gulp.src([`${assetsPath}${imageFolder}/**/*`,
-                    `!${assetsPath}${imageFolder}/${spritesFolder}/`,
-                    `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
-                    `!${assetsPath}${imageFolder}/${svgFolder}/`,
-                    `!${assetsPath}${imageFolder}/${svgFolder}/*`])
+    return gulp.src([
+        `${assetsPath}${imageFolder}/**/*`,
+        `!${assetsPath}${imageFolder}/${spritesFolder}/`,
+        `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
+        `!${assetsPath}${imageFolder}/${svgFolder}/`,
+        `!${assetsPath}${imageFolder}/${svgFolder}/*`
+    ])
         .pipe(image([
             image.svgo({
                 plugins: [
@@ -188,7 +171,7 @@ gulp.task('images', ['cleanup', 'svg-sprite'], () => {
 gulp.task('svg-sprite', () => {
     return gulp.src(`${assetsPath}${imageFolder}/${svgFolder}/*.svg`)
         .pipe(svgSymbols({
-            className: '.icon--%f',
+            class: '.icon--%f',
             title: false
         }))
         .pipe(rename(path => {
@@ -210,34 +193,12 @@ gulp.task('webp', () => {
 });
 
 /**
-* Static analysis => flow + ESlint
+* Static analysis => ESlint
 */
-gulp.task('flow-eslint', () => {
+gulp.task('eslint', () => {
     return gulp.src([`${assetsPath}/js/**/*.js`, '!node_modules/**'])
         .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(flow({
-            all: false,
-            weak: false,
-            killFlow: false,
-            beep: true,
-            abort: false
-        }));
-});
-
-/**
-* Webpack - production
-*/
-gulp.task('webpack-prod', () => {
-    webpack(webpackConfigProd, (err, stats) => {
-        if (err) {
-            throw new gutil.PluginError('webpack:build', err);
-        }
-        gutil.log('[webpack:build]', stats.toString({
-            colors: true,
-            noInfo: true
-        }));
-    });
+        .pipe(eslint.format());
 });
 
 /**
@@ -250,27 +211,28 @@ gulp.task('cleanup', () => {
 /**
 * DEVELOPMENT
 */
-gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'flow-eslint'], () => {
-
-    // watch js
-    gulp.watch(`${assetsPath}js/**/*.js`, ['flow-eslint']);
-
+gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'eslint'], () => {
     // watch pug
     gulp.watch(`${assetsPath}pug/**/*.pug`, ['pug']);
 
     // watch html
     gulp.watch(`${outputPath}${staticTemplatesFolder}/*.html`).on('change', reload);
 
+    // watch js
+    gulp.watch(`${assetsPath}js/**/*.js`, ['eslint']);
+
     // watch css
     gulp.watch(`${assetsPath}${cssFolder}/**/*.sss`, ['css-dev']);
 
     // watch images except sprites folders
-    gulp.watch([`${assetsPath}${imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
-              `!${assetsPath}${imageFolder}/${spritesFolder}/`,
-              `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
-              `!${assetsPath}${imageFolder}/${svgFolder}/`,
-              `!${assetsPath}${imageFolder}/${svgFolder}/*`,
-              `!${assetsPath}${imageFolder}/sprite.svg`])
+    gulp.watch([
+        `${assetsPath}${imageFolder}/**/*.{jpg,jpeg,png,gif,svg}`,
+        `!${assetsPath}${imageFolder}/${spritesFolder}/`,
+        `!${assetsPath}${imageFolder}/${spritesFolder}/*`,
+        `!${assetsPath}${imageFolder}/${svgFolder}/`,
+        `!${assetsPath}${imageFolder}/${svgFolder}/*`,
+        `!${assetsPath}${imageFolder}/sprite.svg`
+    ])
         .on('change', (file) => {
             if (file.type !== 'deleted') {
                 var sourceFolder = assetsPath + imageFolder,
@@ -305,6 +267,6 @@ gulp.task('default', ['pug', 'css-dev', 'images', 'browser-sync', 'flow-eslint']
 /**
 * PRODUCTION
 */
-gulp.task('build', ['pug', 'webpack-prod', 'css-prod', 'images', 'flow-eslint'], () => {
+gulp.task('build', ['pug', 'css-prod', 'images'], () => {
     runSequence(['prettify']);
 });
