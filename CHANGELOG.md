@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2018-03-27
+### Added
+- webpack 4
+
+### Changed
+- dependencies up to date
+- npm scripts
+
+### Removed
+- flow
+
 ## [1.4.0] - 2017-05-13
 ### Added
 - flow

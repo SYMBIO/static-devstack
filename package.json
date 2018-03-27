@@ -1,6 +1,6 @@
 {
   "name": "symbio-devstack",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "SYMBIO Digital",
   "description": "SYMBIO static devstack",
   "license": "MIT",

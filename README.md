@@ -1,11 +1,11 @@
 # SYMBIO static-devstack
 
 ### Version
-1.3.0
+1.5.0
 
 ### Description
 Frontend static devstack including:
-* [Webpack 2](https://webpack.github.io/) a module bundler
+* [Webpack 4](https://webpack.github.io/) a module bundler
 * [Hot Module Replacement](https://webpack.github.io/docs/hot-module-replacement.html) (HMR) is a feature to inject updated modules into the active runtime
 * [Gulp](http://gulpjs.com/) a JavaScript task manager
 * [Babel](https://babeljs.io/) a JavaScript compiler
@@ -20,12 +20,12 @@ $ yarn
 
 ### Development
 ```sh
-$ gulp
+$ yarn run dev
 ```
 
 ### Production
 ```sh
-$ gulp build
+$ yarn run build
 ```
 
 ### PostCSS plugins
